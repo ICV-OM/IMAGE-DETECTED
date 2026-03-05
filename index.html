@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>كاشف الموقع | Photo Location Detector</title>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&family=Tajawal:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#060a13;--card:#0c1322;--card2:#151d2e;--cyan:#00e8a2;--blue:#0ea5e9;--orange:#f59e0b;--red:#ef4444;--gold:#fbbf24;--txt:#e2e8f0;--txt2:#7c8ba5;--txt3:#3e4a60;--brd:rgba(0,232,162,0.1);--brd2:rgba(0,232,162,0.3)}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Tajawal',sans-serif;background:var(--bg);color:var(--txt);min-height:100vh}
+.bg-fx{position:fixed;inset:0;z-index:0;pointer-events:none;background:radial-gradient(ellipse 500px 400px at 15% 10%,rgba(0,232,162,0.05),transparent),radial-gradient(ellipse 400px 400px at 85% 85%,rgba(14,165,233,0.04),transparent)}
+.wrap{position:relative;z-index:1;max-width:1440px;margin:0 auto;padding:16px}
+.hdr{text-align:center;padding:24px 0 18px}
+.hdr-ico{display:inline-flex;align-items:center;justify-content:center;width:64px;height:64px;border-radius:16px;margin-bottom:12px;background:linear-gradient(135deg,var(--cyan),var(--blue));box-shadow:0 0 30px rgba(0,232,162,0.25);font-size:26px;color:var(--bg);animation:glow 3s ease-in-out infinite}
+@keyframes glow{0%,100%{box-shadow:0 0 20px rgba(0,232,162,0.2)}50%{box-shadow:0 0 40px rgba(0,232,162,0.4)}}
+.hdr h1{font-family:'Cairo',sans-serif;font-size:2.3rem;font-weight:900;background:linear-gradient(135deg,var(--cyan),#fff,var(--gold));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.hdr>p{color:var(--txt2);font-size:.92rem;margin-top:4px}
+.env-tag{display:inline-block;margin-top:8px;padding:4px 14px;border-radius:12px;font-size:.76rem;font-weight:600}
+.env-c{background:rgba(0,232,162,0.1);color:var(--cyan)}
+.env-e{background:rgba(14,165,233,0.1);color:var(--blue)}
+.banner{display:none;background:var(--card);border:1px solid var(--brd2);border-radius:14px;padding:14px 20px;margin-bottom:16px;animation:fd .5s ease}
+.banner.on{display:block}
+@keyframes fd{from{opacity:0;transform:translateY(-10px)}to{opacity:1;transform:translateY(0)}}
+.ban-row{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px}
+.ban-name{font-family:'Cairo',sans-serif;font-size:1.15rem;font-weight:700;margin-top:3px}
+.ban-coord{font-size:.8rem;color:var(--txt2);font-family:monospace;direction:ltr}
+.badge{display:inline-flex;align-items:center;gap:5px;padding:3px 11px;border-radius:16px;font-size:.76rem;font-weight:600}
+.badge-g{background:rgba(0,232,162,0.12);color:var(--cyan)}
+.badge-a{background:rgba(245,158,11,0.12);color:var(--orange)}
+.cpbtn{margin-top:3px;background:var(--card2);border:1px solid var(--brd);color:var(--txt2);padding:4px 11px;border-radius:7px;cursor:pointer;font-size:.76rem;font-family:'Tajawal',sans-serif;transition:.2s}
+.cpbtn:hover{border-color:var(--cyan);color:var(--cyan)}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+@media(max-width:960px){.grid{grid-template-columns:1fr}}
+.crd{background:var(--card);border:1px solid var(--brd);border-radius:16px;padding:22px;position:relative;overflow:hidden}
+.crd::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--cyan),var(--blue));opacity:.5}
+.crd-h{font-family:'Cairo',sans-serif;font-size:1.1rem;font-weight:700;color:var(--cyan);margin-bottom:16px;display:flex;align-items:center;gap:9px}
+.crd-h .ib{width:32px;height:32px;display:flex;align-items:center;justify-content:center;background:rgba(0,232,162,0.08);border-radius:9px;font-size:1rem}
+.upl{border:2px dashed rgba(0,232,162,0.2);border-radius:13px;padding:36px 20px;text-align:center;cursor:pointer;transition:.3s;background:rgba(0,232,162,0.01)}
+.upl:hover,.upl.dg{border-color:var(--cyan);background:rgba(0,232,162,0.04)}
+.upl.hf{padding:12px}.upl.hf .upl-p{display:none}.upl.hf .upl-img{display:block}
+.upl h3{font-family:'Cairo',sans-serif;font-size:1.02rem;margin-bottom:4px}
+.upl .hn{color:var(--txt2);font-size:.8rem}
+.upl input{display:none}
+.upl-img{display:none;max-width:100%;max-height:260px;border-radius:9px;margin:0 auto;object-fit:contain}
+.btn-go{width:100%;padding:13px;margin-top:14px;border:none;border-radius:11px;font-family:'Cairo',sans-serif;font-size:1.02rem;font-weight:700;cursor:pointer;background:linear-gradient(135deg,var(--cyan),var(--blue));color:var(--bg);display:flex;align-items:center;justify-content:center;gap:8px;transition:.3s}
+.btn-go:hover:not(:disabled){transform:translateY(-2px);box-shadow:0 5px 20px rgba(0,232,162,0.25)}
+.btn-go:disabled{opacity:.35;cursor:not-allowed}
+.btn-go .spn{display:none}.btn-go.ld .spn{display:inline-block}.btn-go.ld .bl{display:none}
+.spinner{display:inline-block;width:18px;height:18px;border:3px solid rgba(6,10,19,0.2);border-top-color:var(--bg);border-radius:50%;animation:sp .7s linear infinite}
+@keyframes sp{to{transform:rotate(360deg)}}
+.btn-rst{display:none;margin:10px auto 0;background:rgba(239,68,68,0.08);border:1px solid rgba(239,68,68,0.22);color:var(--red);padding:6px 16px;border-radius:9px;cursor:pointer;font-family:'Tajawal',sans-serif;font-size:.8rem}
+.btn-rst.on{display:block}
+.map-wrap{width:100%;height:420px;border-radius:13px;overflow:hidden;background:#111b2e;border:1px solid var(--brd);position:relative}
+.map-wrap iframe,.map-wrap img{width:100%;height:100%;border:none;border-radius:13px;display:block}
+.map-wrap img{object-fit:cover}
+.map-ph{display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;color:var(--txt3);gap:8px}
+.map-ph span{font-size:2.4rem;opacity:.3}
+.map-links{display:none;gap:8px;margin-top:10px;flex-wrap:wrap}
+.map-links a{padding:6px 14px;border-radius:8px;text-decoration:none;font-size:.8rem;font-family:'Tajawal',sans-serif;transition:.2s;display:inline-flex;align-items:center;gap:4px}
+.ml-g{background:rgba(0,232,162,0.08);border:1px solid rgba(0,232,162,0.2);color:var(--cyan)}.ml-g:hover{background:rgba(0,232,162,0.15)}
+.ml-o{background:rgba(14,165,233,0.08);border:1px solid rgba(14,165,233,0.2);color:var(--blue)}.ml-o:hover{background:rgba(14,165,233,0.15)}
+.ml-s{background:rgba(245,158,11,0.08);border:1px solid rgba(245,158,11,0.2);color:var(--orange)}.ml-s:hover{background:rgba(245,158,11,0.15)}
+.loc-grid{display:none;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px;margin-top:12px}
+.di{background:var(--card2);border:1px solid var(--brd);border-radius:9px;padding:10px 12px;transition:.2s}
+.di:hover{border-color:var(--brd2);transform:translateX(-2px)}
+.dl{font-size:.73rem;color:var(--txt2);margin-bottom:2px}.dv{font-family:'Cairo',sans-serif;font-weight:600;font-size:.88rem;word-break:break-word}.dv.gd{color:var(--gold)}
+.gps-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px}
+.exif-row{display:flex;justify-content:space-between;padding:7px 10px;border-bottom:1px solid rgba(255,255,255,0.03);font-size:.82rem}
+.exif-row .lbl{color:var(--txt2)}.exif-row .val{font-weight:500;direction:ltr}
+.aib{background:var(--card2);border:1px solid rgba(245,158,11,0.13);border-radius:11px;padding:16px;position:relative}
+.aib::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--orange),var(--gold))}
+.ai-tag{display:inline-flex;align-items:center;gap:4px;background:rgba(245,158,11,0.1);color:var(--orange);padding:3px 10px;border-radius:14px;font-size:.73rem;font-weight:600;margin-bottom:8px}
+.aib>p{line-height:1.8;font-size:.88rem}
+.cfh{display:flex;justify-content:space-between;font-size:.76rem;margin-bottom:4px;margin-top:12px}
+.cft{width:100%;height:6px;background:rgba(255,255,255,0.04);border-radius:3px;overflow:hidden}
+.cff{height:100%;border-radius:3px;background:linear-gradient(90deg,var(--red),var(--orange),var(--cyan));transition:width 1.2s ease-out}
+.cl-list{margin:5px 0 0;padding-right:16px}.cl-list li{margin-bottom:4px;font-size:.84rem;line-height:1.6}
+.exg{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}
+@media(max-width:600px){.exg{grid-template-columns:1fr}}
+.emp{text-align:center;padding:24px;color:var(--txt3)}.emp span{font-size:1.8rem;display:block;margin-bottom:8px;opacity:.25}
+.mdl{display:none;position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,0.75);backdrop-filter:blur(6px);align-items:center;justify-content:center}
+.mdl.on{display:flex}
+.mdl-box{background:var(--card);border:1px solid var(--brd2);border-radius:18px;padding:30px;max-width:460px;width:92%;text-align:center}
+.mdl-box h3{font-family:'Cairo',sans-serif;color:var(--cyan);margin-bottom:12px;font-size:1.2rem}
+.mdl-box>p{color:var(--txt2);font-size:.87rem;margin-bottom:16px;line-height:1.7}
+.mdl-inp{width:100%;padding:12px 16px;border-radius:10px;border:1px solid var(--brd);background:var(--card2);color:var(--txt);font-family:monospace;font-size:.9rem;direction:ltr;text-align:left;margin-bottom:14px;outline:none;transition:.3s}
+.mdl-inp:focus{border-color:var(--cyan);box-shadow:0 0 12px rgba(0,232,162,0.15)}
+.mdl-sv{padding:10px 30px;border:none;border-radius:10px;cursor:pointer;background:linear-gradient(135deg,var(--cyan),var(--blue));color:var(--bg);font-family:'Cairo',sans-serif;font-size:1rem;font-weight:700;transition:.3s}
+.mdl-sv:hover{transform:translateY(-1px);box-shadow:0 4px 16px rgba(0,232,162,0.3)}
+.mdl-sk{display:block;margin:10px auto 0;background:none;border:none;color:var(--txt2);cursor:pointer;font-family:'Tajawal',sans-serif;font-size:.82rem;text-decoration:underline}
+.mdl-note{margin-top:12px;font-size:.75rem;color:var(--txt3);line-height:1.5}
+</style>
+</head>
+<body>
+<div class="bg-fx"></div>
+
+<!-- API Modal -->
+<div class="mdl" id="apiMdl">
+<div class="mdl-box">
+<h3>🔑 مفتاح Anthropic API</h3>
+<p>لاستخدام تحليل الذكاء الاصطناعي، أدخل مفتاح API الخاص بك</p>
+<input class="mdl-inp" id="apiInp" type="password" placeholder="sk-ant-api03-...">
+<button class="mdl-sv" onclick="saveKey()">✓ حفظ والمتابعة</button>
+<button class="mdl-sk" onclick="skipKey()">تخطي — EXIF + GPS فقط</button>
+<p class="mdl-note">🔒 المفتاح يُحفظ محلياً في المتصفح فقط</p>
+</div>
+</div>
+
+<div class="wrap">
+<div class="hdr">
+<div class="hdr-ico">✦</div>
+<h1>كاشف الموقع</h1>
+<p>اكتشف الموقع الحقيقي لالتقاط أي صورة عبر بيانات GPS والذكاء الاصطناعي</p>
+<div id="envTag"></div>
+</div>
+
+<div class="banner" id="banner">
+<div class="ban-row">
+<div><div id="methBadge" class="badge badge-g">📡 GPS</div><div class="ban-name" id="banName">—</div></div>
+<div style="text-align:left"><span class="ban-coord" id="banCoord">—</span><br><button class="cpbtn" id="cpBtn" onclick="cpCoords()">📋 نسخ الإحداثيات</button></div>
+</div>
+</div>
+
+<div class="grid">
+<div class="crd">
+<div class="crd-h"><span class="ib">☁️</span> رفع الصورة</div>
+<div class="upl" id="uplArea"><input type="file" id="fInp" accept="image/*">
+<div class="upl-p"><div style="font-size:2.4rem;margin-bottom:8px">🖼️</div><h3>اسحب الصورة هنا أو انقر للرفع</h3><p class="hn">PNG, JPG, JPEG, TIFF</p></div>
+<img class="upl-img" id="uplImg" alt="معاينة"></div>
+<button class="btn-go" id="btnGo" disabled onclick="doAnalyze()"><div class="spn"><div class="spinner"></div></div><span class="bl">🔍 تحليل وكشف الموقع</span></button>
+<button class="btn-rst" id="btnRst" onclick="doReset()">🔄 تحليل صورة جديدة</button>
+</div>
+
+<div class="crd">
+<div class="crd-h"><span class="ib">🗺️</span> خريطة الموقع</div>
+<div class="map-wrap" id="mapWrap"><div class="map-ph" id="mapPh"><span>🌍</span><p>سيظهر الموقع على الخريطة بعد التحليل</p></div></div>
+<div class="map-links" id="mapLinks"></div>
+<div class="loc-grid" id="locGrid"></div>
+</div>
+
+<div class="crd">
+<div class="crd-h"><span class="ib">📊</span> البيانات الوصفية (EXIF)</div>
+<div id="exifBox"><div class="emp"><span>🔬</span><p>سيتم عرض البيانات الوصفية بعد رفع الصورة</p></div></div>
+</div>
+
+<div class="crd" id="aiCard">
+<div class="crd-h"><span class="ib">🧠</span> تحليل الذكاء الاصطناعي</div>
+<div id="aiBox"><div class="emp"><span>🤖</span><p>سيقوم الذكاء الاصطناعي بتحليل الصورة لتحديد الموقع</p></div></div>
+</div>
+</div>
+</div>
+
+<script>
+let file=null,b64=null,lat=null,lng=null,apiKey=null,inClaude=false,hasAI=false;
+
+try{if(window.location.hostname.includes('claude')||window.location.hostname.includes('anthropic')||window.parent!==window)inClaude=true}catch(e){inClaude=true}
+if(inClaude){hasAI=true;document.getElementById('envTag').innerHTML='<span class="env-tag env-c">✓ داخل Claude — كل الميزات متاحة</span>'}
+else{try{apiKey=sessionStorage.getItem('akey')}catch(e){}if(apiKey){hasAI=true;document.getElementById('envTag').innerHTML='<span class="env-tag env-c">✓ مفتاح API محفوظ — كل الميزات متاحة</span>'}else{document.getElementById('apiMdl').classList.add('on')}}
+
+function saveKey(){const k=document.getElementById('apiInp').value.trim();if(!k)return;apiKey=k;hasAI=true;try{sessionStorage.setItem('akey',k)}catch(e){}document.getElementById('apiMdl').classList.remove('on');document.getElementById('envTag').innerHTML='<span class="env-tag env-c">✓ مفتاح API محفوظ — كل الميزات متاحة</span>'}
+function skipKey(){document.getElementById('apiMdl').classList.remove('on');document.getElementById('envTag').innerHTML='<span class="env-tag env-e">🌐 وضع EXIF + GPS فقط</span>';document.getElementById('aiCard').style.display='none'}
+
+const uplArea=document.getElementById('uplArea'),fInp=document.getElementById('fInp'),uplImg=document.getElementById('uplImg');
+uplArea.onclick=()=>fInp.click();
+['dragenter','dragover'].forEach(v=>uplArea.addEventListener(v,e=>{e.preventDefault();uplArea.classList.add('dg')}));
+['dragleave','drop'].forEach(v=>uplArea.addEventListener(v,e=>{e.preventDefault();uplArea.classList.remove('dg')}));
+uplArea.addEventListener('drop',e=>{if(e.dataTransfer.files.length)loadF(e.dataTransfer.files[0])});
+fInp.onchange=e=>{if(e.target.files.length)loadF(e.target.files[0])};
+function loadF(f){if(!f.type.startsWith('image/'))return alert('يرجى رفع ملف صورة صالح');file=f;const r=new FileReader();r.onload=e=>{uplImg.src=e.target.result;uplArea.classList.add('hf');document.getElementById('btnGo').disabled=false;b64=e.target.result.split(',')[1]};r.readAsDataURL(f)}
+
+/* ===== EXIF ===== */
+function parseEXIF(buf){
+  const v=new DataView(buf),res={tags:{},gps:null};if(v.byteLength<4||v.getUint16(0)!==0xffd8)return res;
+  const T={0x010f:"Make",0x0110:"Model",0x0132:"DateTime",0x9003:"DateTimeOriginal",0x829a:"ExposureTime",0x829d:"FNumber",0x8827:"ISOSpeedRatings",0x920a:"FocalLength",0x9209:"Flash",0xa002:"PixelXDimension",0xa003:"PixelYDimension",0x0131:"Software",0xa001:"ColorSpace"};
+  const G={0x0001:"LatRef",0x0002:"Lat",0x0003:"LngRef",0x0004:"Lng",0x0006:"Alt"};
+  const r16=(o,l)=>v.getUint16(o,l),r32=(o,l)=>v.getUint32(o,l),rat=(o,l)=>{const d=r32(o+4,l);return d?r32(o,l)/d:0},coord=(o,l)=>rat(o,l)+rat(o+8,l)/60+rat(o+16,l)/3600;
+  const rv=(t,c,o,l)=>{if(t===2){let s="";for(let i=0;i<c-1;i++)s+=String.fromCharCode(v.getUint8(o+i));return s}if(t===3)return r16(o,l);if(t===4)return r32(o,l);if(t===5)return rat(o,l);if(t===1||t===7)return v.getUint8(o);return null};
+  const pIFD=(b,io,tm,ig)=>{const tg={},ab=b+io;if(ab+2>v.byteLength)return tg;const le=v.getUint16(b)===0x4949,cn=r16(ab,le);for(let i=0;i<cn;i++){const eo=ab+2+i*12;if(eo+12>v.byteLength)break;const tag=r16(eo,le),tp=r16(eo+2,le),c=r32(eo+4,le),sz=[0,1,1,2,4,8,1,1,2,4,8][tp]||0,vo=c*sz>4?b+r32(eo+8,le):eo+8;if(vo<0||vo>=v.byteLength)continue;const nm=tm[tag];if(nm){if(ig&&(tag===2||tag===4)){if(vo+24<=v.byteLength)tg[nm]=coord(vo,le)}else{const vl=rv(tp,c,vo,le);if(vl!==null)tg[nm]=vl}}if(!ig&&tag===0x8825){const gt=pIFD(b,r32(eo+8,le),G,true);if(gt.Lat!=null&&gt.Lng!=null){let la=gt.Lat,ln=gt.Lng;if(gt.LatRef==="S")la=-la;if(gt.LngRef==="W")ln=-ln;res.gps={lat:la,lng:ln,alt:gt.Alt||null}}}if(!ig&&tag===0x8769)Object.assign(tg,pIFD(b,r32(eo+8,le),T,false))}return tg};
+  let off=2;while(off<v.byteLength-1){const mk=v.getUint16(off);if(mk===0xffe1){const s=off+4;if(v.getUint8(s)===0x45&&v.getUint8(s+1)===0x78&&v.getUint8(s+2)===0x69&&v.getUint8(s+3)===0x66){const b=s+6;res.tags=pIFD(b,r32(b+4,v.getUint16(b)===0x4949),T,false)}break}else if((mk&0xff00)===0xff00)off+=2+v.getUint16(off+2);else break}return res;
+}
+
+/* ===== MAP with cascading fallbacks ===== */
+function showMap(la,ln){
+  const wrap=document.getElementById('mapWrap');
+  wrap.innerHTML='';
+
+  // Method 1: Google Maps iframe
+  const gIframe=document.createElement('iframe');
+  gIframe.src=`https://maps.google.com/maps?q=${la},${ln}&z=15&output=embed`;
+  gIframe.style.cssText='width:100%;height:100%;border:none;border-radius:13px';
+  gIframe.setAttribute('allowfullscreen','');
+  gIframe.setAttribute('loading','lazy');
+  gIframe.setAttribute('referrerpolicy','no-referrer-when-downgrade');
+
+  let loaded=false;
+  gIframe.onload=()=>{loaded=true};
+
+  // If Google fails after 3s, try OSM
+  setTimeout(()=>{
+    if(!loaded||!gIframe.contentWindow){
+      tryOSM(wrap,la,ln);
+    }
+  },3000);
+
+  gIframe.onerror=()=>tryOSM(wrap,la,ln);
+  wrap.appendChild(gIframe);
+
+  // Map links
+  const ml=document.getElementById('mapLinks');
+  ml.innerHTML=`
+    <a class="ml-g" href="https://www.google.com/maps?q=${la},${ln}" target="_blank" rel="noreferrer">📍 Google Maps</a>
+    <a class="ml-s" href="https://www.google.com/maps/@${la},${ln},1000m/data=!3m1!1e3" target="_blank" rel="noreferrer">🛰️ قمر صناعي</a>
+    <a class="ml-o" href="https://www.openstreetmap.org/?mlat=${la}&mlon=${ln}#map=15/${la}/${ln}" target="_blank" rel="noreferrer">🗺️ OpenStreetMap</a>
+    <a class="ml-g" href="https://www.google.com/maps/@${la},${ln},0a,73.7y,0h,90t/data=!3m4!1e1!3m2!1s!2e0" target="_blank" rel="noreferrer">🔍 Street View</a>`;
+  ml.style.display='flex';
+}
+
+function tryOSM(wrap,la,ln){
+  wrap.innerHTML='';
+  const osmFrame=document.createElement('iframe');
+  osmFrame.src=`https://www.openstreetmap.org/export/embed.html?bbox=${ln-0.01},${la-0.006},${ln+0.01},${la+0.006}&layer=mapnik&marker=${la},${ln}`;
+  osmFrame.style.cssText='width:100%;height:100%;border:none;border-radius:13px';
+  let osmLoaded=false;
+  osmFrame.onload=()=>{osmLoaded=true};
+  setTimeout(()=>{if(!osmLoaded)tryStaticMap(wrap,la,ln)},3000);
+  osmFrame.onerror=()=>tryStaticMap(wrap,la,ln);
+  wrap.appendChild(osmFrame);
+}
+
+function tryStaticMap(wrap,la,ln){
+  wrap.innerHTML=`
+    <div style="width:100%;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;background:#0a1628;padding:20px;text-align:center">
+      <div style="font-size:3rem;margin-bottom:12px">📍</div>
+      <div style="font-family:'Cairo',sans-serif;font-size:1.3rem;font-weight:700;color:var(--cyan);margin-bottom:8px">${la.toFixed(5)}°, ${ln.toFixed(5)}°</div>
+      <p style="color:var(--txt2);font-size:.85rem;margin-bottom:16px">تم تحديد الموقع بنجاح! اضغط على أحد الروابط أدناه لعرض الخريطة</p>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;justify-content:center">
+        <a href="https://www.google.com/maps?q=${la},${ln}" target="_blank" rel="noreferrer" style="padding:10px 20px;border-radius:10px;background:linear-gradient(135deg,var(--cyan),var(--blue));color:var(--bg);text-decoration:none;font-family:'Cairo',sans-serif;font-weight:700;font-size:.9rem">📍 فتح Google Maps</a>
+        <a href="https://www.openstreetmap.org/?mlat=${la}&mlon=${ln}#map=15/${la}/${ln}" target="_blank" rel="noreferrer" style="padding:10px 20px;border-radius:10px;background:rgba(14,165,233,0.15);border:1px solid var(--blue);color:var(--blue);text-decoration:none;font-family:'Cairo',sans-serif;font-weight:700;font-size:.9rem">🗺️ فتح OpenStreetMap</a>
+      </div>
+    </div>`;
+}
+
+/* ===== REVERSE GEOCODE ===== */
+async function revGeo(la,ln){
+  try{const r=await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${la}&lon=${ln}&zoom=18&addressdetails=1&accept-language=ar`);const d=await r.json();const a=d.address||{};
+  document.getElementById('banName').textContent=(d.display_name||'').split(',').slice(0,3).join('، ');document.getElementById('banCoord').textContent=`${la.toFixed(6)}, ${ln.toFixed(6)}`;document.getElementById('banner').classList.add('on');
+  const g=document.getElementById('locGrid');const flds=[["country","الدولة"],["state","المحافظة"],["city","المدينة"],["town","البلدة"],["village","القرية"],["suburb","الحي"],["road","الشارع"],["postcode","الرمز البريدي"],["neighbourhood","المنطقة"]];
+  let ch='';flds.forEach(([k,lbl])=>{if(a[k])ch+=`<div class="di"><div class="dl">${lbl}</div><div class="dv">${a[k]}</div></div>`});if(ch){g.innerHTML=ch;g.style.display='grid'}
+  }catch(e){document.getElementById('banName').textContent=`${la.toFixed(4)}, ${ln.toFixed(4)}`;document.getElementById('banCoord').textContent=`${la.toFixed(6)}, ${ln.toFixed(6)}`;document.getElementById('banner').classList.add('on')}
+}
+
+/* ===== EXIF DISPLAY ===== */
+function showExif(tags,gps){
+  const box=document.getElementById('exifBox');const L={Make:"الشركة المصنعة",Model:"طراز الكاميرا",DateTime:"تاريخ الالتقاط",DateTimeOriginal:"التاريخ الأصلي",ExposureTime:"زمن التعريض",FNumber:"فتحة العدسة",ISOSpeedRatings:"ISO",FocalLength:"البعد البؤري",Flash:"الفلاش",PixelXDimension:"عرض الصورة",PixelYDimension:"ارتفاع الصورة",Software:"البرنامج",ColorSpace:"مساحة اللون"};
+  const fmt=(k,v)=>{if(k==="ExposureTime")return v<1?`1/${Math.round(1/v)}s`:`${v}s`;if(k==="FNumber")return`f/${v}`;if(k==="FocalLength")return`${Math.round(v)}mm`;if(k==="Flash")return v&1?"نعم":"لا";return String(v)};
+  let h='';if(gps){h+=`<div class="gps-grid"><div class="di" style="border-color:var(--brd2)"><div class="dl">📍 خط العرض</div><div class="dv gd" dir="ltr">${gps.lat.toFixed(6)}°</div></div><div class="di" style="border-color:var(--brd2)"><div class="dl">📍 خط الطول</div><div class="dv gd" dir="ltr">${gps.lng.toFixed(6)}°</div></div>`;if(gps.alt!=null)h+=`<div class="di"><div class="dl">⛰️ الارتفاع</div><div class="dv" dir="ltr">${gps.alt.toFixed(1)} م</div></div>`;h+=`</div>`}
+  let cnt=0;Object.entries(L).forEach(([k,lbl])=>{const v=tags[k];if(v==null)return;h+=`<div class="exif-row"><span class="lbl">${lbl}</span><span class="val">${fmt(k,v)}</span></div>`;cnt++});
+  if(!cnt&&!gps)h=`<p style="text-align:center;padding:14px;color:var(--txt3)">لا توجد بيانات EXIF في هذه الصورة</p>`;box.innerHTML=h;
+}
+
+/* ===== AI ===== */
+async function runAI(base,mime){
+  if(!hasAI)return;const box=document.getElementById('aiBox');
+  box.innerHTML=`<div style="text-align:center;padding:20px"><div class="spinner" style="border-color:rgba(245,158,11,.15);border-top-color:var(--orange);width:26px;height:26px;margin:0 auto 8px"></div><p style="color:var(--orange)">جاري تحليل الصورة بالذكاء الاصطناعي...</p></div>`;
+  try{const hd={"Content-Type":"application/json"};if(apiKey){hd["x-api-key"]=apiKey;hd["anthropic-version"]="2023-06-01";hd["anthropic-dangerous-direct-browser-access"]="true"}
+  const resp=await fetch("https://api.anthropic.com/v1/messages",{method:"POST",headers:hd,body:JSON.stringify({model:"claude-sonnet-4-20250514",max_tokens:1000,messages:[{role:"user",content:[{type:"image",source:{type:"base64",media_type:mime||"image/jpeg",data:base}},{type:"text",text:`أنت خبير تحليل مواقع جغرافية. حلل الصورة وحدد موقع التقاطها.\nأجب JSON فقط بدون backticks:\n{"location":"المكان","country":"الدولة","city":"المدينة","lat":null,"lng":null,"confidence":50,"clues":["دليل1","دليل2"],"description":"وصف تفصيلي بالعربية","landmarks":[],"climate":"المناخ","vegetation":"النباتات","architecture":"العمارة","signs":"اللافتات"}`}]}]})});
+  const data=await resp.json();if(data.error)throw new Error(data.error.message);const txt=(data.content||[]).map(c=>c.text||'').join('');const ai=JSON.parse(txt.replace(/```json|```/g,'').trim());
+  let h=`<div class="aib"><div class="ai-tag">🧠 تحليل الذكاء الاصطناعي</div><p>${ai.description||'لا يوجد وصف'}</p>`;
+  if(ai.confidence!=null){const c=ai.confidence,cl=c>70?'var(--cyan)':c>40?'var(--orange)':'var(--red)';h+=`<div class="cfh"><span style="color:var(--txt2)">مستوى الثقة</span><span style="color:${cl}">${c}%</span></div><div class="cft"><div class="cff" style="width:${c}%"></div></div>`}
+  if(ai.clues?.length){h+=`<div style="margin-top:10px"><strong style="color:var(--gold);font-size:.82rem">🔍 الأدلة:</strong><ul class="cl-list">`;ai.clues.forEach(c=>{h+=`<li>${c}</li>`});h+=`</ul></div>`}
+  const ext=[["landmarks","المعالم","🏛️"],["climate","المناخ","🌡️"],["vegetation","النباتات","🌿"],["architecture","العمارة","🏗️"],["signs","اللافتات","📝"]];let eh='';ext.forEach(([k,lbl,ic])=>{let v=ai[k];if(!v||v==='غير متوفر'||v==='لا يوجد')return;if(Array.isArray(v)){if(!v.length)return;v=v.join('، ')}eh+=`<div class="di"><div class="dl">${ic} ${lbl}</div><div class="dv">${v}</div></div>`});
+  if(eh)h+=`<div class="exg">${eh}</div>`;h+=`</div>`;box.innerHTML=h;
+  if(!lat&&ai.lat&&ai.lng){lat=ai.lat;lng=ai.lng;showMap(lat,lng);revGeo(lat,lng);document.getElementById('methBadge').className='badge badge-a';document.getElementById('methBadge').textContent='🧠 ذكاء اصطناعي'}
+  }catch(err){box.innerHTML=`<div class="aib" style="border-color:rgba(239,68,68,.15)"><div class="ai-tag" style="background:rgba(239,68,68,.1);color:var(--red)">⚠️ خطأ</div><p style="color:var(--red);font-size:.88rem">تعذر التحليل: ${err.message}</p></div>`}
+}
+
+/* ===== MAIN ===== */
+async function doAnalyze(){
+  if(!file)return;const btn=document.getElementById('btnGo');btn.classList.add('ld');btn.disabled=true;document.getElementById('btnRst').classList.add('on');lat=null;lng=null;
+  const buf=await file.arrayBuffer();const exif=parseEXIF(buf);let hasGPS=false;
+  if(exif.gps?.lat&&exif.gps?.lng){lat=exif.gps.lat;lng=exif.gps.lng;hasGPS=true;showMap(lat,lng);revGeo(lat,lng);document.getElementById('methBadge').className='badge badge-g';document.getElementById('methBadge').textContent='📡 تم الكشف عبر GPS'}
+  showExif(exif.tags,exif.gps);
+  if(hasAI)await runAI(b64,file.type||'image/jpeg');
+  else if(!hasGPS){document.getElementById('mapWrap').innerHTML=`<div style="display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;padding:20px;text-align:center"><span style="font-size:2rem;margin-bottom:10px">⚠️</span><p style="color:var(--orange);font-size:.9rem;line-height:1.7">لا توجد بيانات GPS — جرّب صورة ملتقطة من هاتفك</p></div>`}
+  btn.classList.remove('ld');btn.disabled=false;
+}
+
+function cpCoords(){if(!lat||!lng)return;const t=`${lat.toFixed(6)}, ${lng.toFixed(6)}`;try{navigator.clipboard.writeText(t)}catch(e){const a=document.createElement('textarea');a.value=t;document.body.appendChild(a);a.select();document.execCommand('copy');document.body.removeChild(a)}const b=document.getElementById('cpBtn');b.textContent='✓ تم النسخ!';b.style.color='var(--cyan)';setTimeout(()=>{b.textContent='📋 نسخ الإحداثيات';b.style.color=''},1500)}
+
+function doReset(){file=null;b64=null;lat=null;lng=null;uplArea.classList.remove('hf');uplImg.src='';fInp.value='';document.getElementById('btnGo').disabled=true;document.getElementById('btnRst').classList.remove('on');document.getElementById('banner').classList.remove('on');document.getElementById('locGrid').style.display='none';document.getElementById('locGrid').innerHTML='';document.getElementById('mapLinks').style.display='none';document.getElementById('mapWrap').innerHTML='<div class="map-ph" id="mapPh"><span>🌍</span><p>سيظهر الموقع على الخريطة بعد التحليل</p></div>';document.getElementById('exifBox').innerHTML='<div class="emp"><span>🔬</span><p>سيتم عرض البيانات الوصفية بعد رفع الصورة</p></div>';const ab=document.getElementById('aiBox');if(ab)ab.innerHTML='<div class="emp"><span>🤖</span><p>سيقوم الذكاء الاصطناعي بتحليل الصورة لتحديد الموقع</p></div>'}
+</script>
+</body>
+</html>
