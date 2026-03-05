@@ -23,8 +23,7 @@ body{font-family:'Tajawal',sans-serif;background:var(--bg);color:var(--txt);min-
 .ban-name{font-family:'Cairo',sans-serif;font-size:1.15rem;font-weight:700;margin-top:3px}
 .ban-coord{font-size:.8rem;color:var(--txt2);font-family:monospace;direction:ltr}
 .badge{display:inline-flex;align-items:center;gap:5px;padding:3px 11px;border-radius:16px;font-size:.76rem;font-weight:600}
-.badge-g{background:rgba(0,232,162,0.12);color:var(--cyan)}
-.badge-a{background:rgba(245,158,11,0.12);color:var(--orange)}
+.badge-g{background:rgba(0,232,162,0.12);color:var(--cyan)}.badge-a{background:rgba(245,158,11,0.12);color:var(--orange)}
 .cpbtn{margin-top:3px;background:var(--card2);border:1px solid var(--brd);color:var(--txt2);padding:4px 11px;border-radius:7px;cursor:pointer;font-size:.76rem;font-family:'Tajawal',sans-serif;transition:.2s}
 .cpbtn:hover{border-color:var(--cyan);color:var(--cyan)}
 .grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
@@ -37,8 +36,7 @@ body{font-family:'Tajawal',sans-serif;background:var(--bg);color:var(--txt);min-
 .upl:hover,.upl.dg{border-color:var(--cyan);background:rgba(0,232,162,0.04)}
 .upl.hf{padding:12px}.upl.hf .upl-p{display:none}.upl.hf .upl-img{display:block}
 .upl h3{font-family:'Cairo',sans-serif;font-size:1.02rem;margin-bottom:4px}
-.upl .hn{color:var(--txt2);font-size:.8rem}
-.upl input{display:none}
+.upl .hn{color:var(--txt2);font-size:.8rem}.upl input{display:none}
 .upl-img{display:none;max-width:100%;max-height:260px;border-radius:9px;margin:0 auto;object-fit:contain}
 .btn-go{width:100%;padding:13px;margin-top:14px;border:none;border-radius:11px;font-family:'Cairo',sans-serif;font-size:1.02rem;font-weight:700;cursor:pointer;background:linear-gradient(135deg,var(--cyan),var(--blue));color:var(--bg);display:flex;align-items:center;justify-content:center;gap:8px;transition:.3s}
 .btn-go:hover:not(:disabled){transform:translateY(-2px);box-shadow:0 5px 20px rgba(0,232,162,0.25)}
@@ -46,12 +44,10 @@ body{font-family:'Tajawal',sans-serif;background:var(--bg);color:var(--txt);min-
 .btn-go .spn{display:none}.btn-go.ld .spn{display:inline-block}.btn-go.ld .bl{display:none}
 .spinner{display:inline-block;width:18px;height:18px;border:3px solid rgba(6,10,19,0.2);border-top-color:var(--bg);border-radius:50%;animation:sp .7s linear infinite}
 @keyframes sp{to{transform:rotate(360deg)}}
-.btn-rst{display:none;margin:10px auto 0;background:rgba(239,68,68,0.08);border:1px solid rgba(239,68,68,0.22);color:var(--red);padding:6px 16px;border-radius:9px;cursor:pointer;font-family:'Tajawal',sans-serif;font-size:.8rem}
-.btn-rst.on{display:block}
+.btn-rst{display:none;margin:10px auto 0;background:rgba(239,68,68,0.08);border:1px solid rgba(239,68,68,0.22);color:var(--red);padding:6px 16px;border-radius:9px;cursor:pointer;font-family:'Tajawal',sans-serif;font-size:.8rem}.btn-rst.on{display:block}
 .map-wrap{width:100%;height:420px;border-radius:13px;overflow:hidden;background:#111b2e;border:1px solid var(--brd);position:relative}
 .map-wrap iframe{width:100%;height:100%;border:none;border-radius:13px;display:block}
-.map-ph{display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;color:var(--txt3);gap:8px}
-.map-ph span{font-size:2.4rem;opacity:.3}
+.map-ph{display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;color:var(--txt3);gap:8px}.map-ph span{font-size:2.4rem;opacity:.3}
 .map-links{display:none;gap:8px;margin-top:10px;flex-wrap:wrap}
 .map-links a{padding:6px 14px;border-radius:8px;text-decoration:none;font-size:.8rem;font-family:'Tajawal',sans-serif;transition:.2s;display:inline-flex;align-items:center;gap:4px}
 .ml-g{background:rgba(0,232,162,0.08);border:1px solid rgba(0,232,162,0.2);color:var(--cyan)}.ml-g:hover{background:rgba(0,232,162,0.15)}
@@ -75,6 +71,7 @@ body{font-family:'Tajawal',sans-serif;background:var(--bg);color:var(--txt);min-
 .exg{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}
 @media(max-width:600px){.exg{grid-template-columns:1fr}}
 .emp{text-align:center;padding:24px;color:var(--txt3)}.emp span{font-size:1.8rem;display:block;margin-bottom:8px;opacity:.25}
+.compress-info{display:inline-block;padding:3px 10px;border-radius:10px;font-size:.7rem;background:rgba(14,165,233,0.1);color:var(--blue);margin-top:6px}
 </style>
 </head>
 <body>
@@ -84,6 +81,7 @@ body{font-family:'Tajawal',sans-serif;background:var(--bg);color:var(--txt);min-
 <div class="hdr-ico">✦</div>
 <h1>كاشف الموقع</h1>
 <p>اكتشف الموقع الحقيقي لالتقاط أي صورة عبر بيانات GPS والذكاء الاصطناعي</p>
+<p style="color:var(--txt3);font-size:.78rem;margin-top:4px">يدعم صور حتى 20MB — يتم ضغطها تلقائياً للتحليل</p>
 </div>
 
 <div class="banner" id="banner">
@@ -97,8 +95,9 @@ body{font-family:'Tajawal',sans-serif;background:var(--bg);color:var(--txt);min-
 <div class="crd">
 <div class="crd-h"><span class="ib">☁️</span> رفع الصورة</div>
 <div class="upl" id="uplArea"><input type="file" id="fInp" accept="image/*">
-<div class="upl-p"><div style="font-size:2.4rem;margin-bottom:8px">🖼️</div><h3>اسحب الصورة هنا أو انقر للرفع</h3><p class="hn">PNG, JPG, JPEG, TIFF — يُفضّل صور ملتقطة من الهاتف مباشرة</p></div>
+<div class="upl-p"><div style="font-size:2.4rem;margin-bottom:8px">🖼️</div><h3>اسحب الصورة هنا أو انقر للرفع</h3><p class="hn">PNG, JPG, JPEG, TIFF — حتى 20MB</p></div>
 <img class="upl-img" id="uplImg" alt="معاينة"></div>
+<div id="compressInfo"></div>
 <button class="btn-go" id="btnGo" disabled onclick="doAnalyze()"><div class="spn"><div class="spinner"></div></div><span class="bl">🔍 تحليل وكشف الموقع</span></button>
 <button class="btn-rst" id="btnRst" onclick="doReset()">🔄 تحليل صورة جديدة</button>
 </div>
@@ -120,47 +119,62 @@ body{font-family:'Tajawal',sans-serif;background:var(--bg);color:var(--txt);min-
 <div id="aiBox"><div class="emp"><span>🤖</span><p>سيقوم الذكاء الاصطناعي بتحليل الصورة لتحديد الموقع</p></div></div>
 </div>
 </div>
-
-<div style="text-align:center;padding:20px 0 10px;color:var(--txt3);font-size:.72rem">
-صُنع بواسطة إبراهيم العلوي | كاشف الموقع v2.0
-</div>
+<div style="text-align:center;padding:20px 0 10px;color:var(--txt3);font-size:.72rem">صُنع بواسطة إبراهيم العلوي | كاشف الموقع v2.0</div>
 </div>
 
 <script>
-/* ===== ANTI-INSPECT PROTECTION ===== */
-!function(){
-  // Disable right-click
-  document.addEventListener('contextmenu',function(e){e.preventDefault();return false});
-  // Disable keyboard shortcuts
-  document.addEventListener('keydown',function(e){
-    // F12
-    if(e.key==='F12'){e.preventDefault();return false}
-    // Ctrl+Shift+I, Ctrl+Shift+J, Ctrl+Shift+C
-    if(e.ctrlKey&&e.shiftKey&&(e.key==='I'||e.key==='i'||e.key==='J'||e.key==='j'||e.key==='C'||e.key==='c')){e.preventDefault();return false}
-    // Ctrl+U (view source)
-    if(e.ctrlKey&&(e.key==='U'||e.key==='u')){e.preventDefault();return false}
-    // Ctrl+S (save)
-    if(e.ctrlKey&&(e.key==='S'||e.key==='s')){e.preventDefault();return false}
-  });
-  // Detect devtools
-  const el=new Image();Object.defineProperty(el,'id',{get:function(){document.body.innerHTML='<div style="display:flex;align-items:center;justify-content:center;height:100vh;background:#060a13;color:#ef4444;font-family:Cairo,sans-serif;font-size:1.5rem;text-align:center;padding:20px">⛔ غير مسموح بفتح أدوات المطور</div>'}});
-  // Disable text selection on sensitive areas
-  document.querySelectorAll('script').forEach(s=>s.setAttribute('data-protected','true'));
-}();
+/* ===== PROTECTION ===== */
+!function(){document.addEventListener('contextmenu',e=>e.preventDefault());document.addEventListener('keydown',e=>{if(e.key==='F12'||(e.ctrlKey&&e.shiftKey&&/[IJCijc]/.test(e.key))||(e.ctrlKey&&/[UuSs]/.test(e.key))){e.preventDefault();return false}})}();
 
 /* ===== STATE ===== */
-let file=null,b64=null,lat=null,lng=null;
+let file=null,b64=null,b64Compressed=null,lat=null,lng=null;
 
-/* ===== OBFUSCATED KEY RETRIEVAL ===== */
-const _0x={
-  a:function(){return[115,107,45,97,110,116,45,97,112,105,48,51,45]},
-  b:function(){return[85,74,115,86,84,57,68,84,110,45,73,114,109,84,72,73,103,85,86,56,90,112,109,116,118,45]},
-  c:function(){return[104,108,104,105,49,52,65,77,100,78,110,109,71,74,104,80,105,45]},
-  d:function(){return[101,74,49,79,110,69,90,117,100,67,118,82,98,107,78,107,108,113,116,100,90,101,85,113,115,106,75,113,68,81,80,108,97,121,103,119,86,71,104,90,54,103,45]},
-  e:function(){return[77,50,86,90,95,103,65,65]},
-  r:function(){return this.a().concat(this.b(),this.c(),this.d(),this.e()).map(function(c){return String.fromCharCode(c)}).join('')}
-};
+/* ===== KEY ===== */
+const _0x={a:()=>[115,107,45,97,110,116,45,97,112,105,48,51,45],b:()=>[85,74,115,86,84,57,68,84,110,45,73,114,109,84,72,73,103,85,86,56,90,112,109,116,118,45],c:()=>[104,108,104,105,49,52,65,77,100,78,110,109,71,74,104,80,105,45],d:()=>[101,74,49,79,110,69,90,117,100,67,118,82,98,107,78,107,108,113,116,100,90,101,85,113,115,106,75,113,68,81,80,108,97,121,103,119,86,71,104,90,54,103,45],e:()=>[77,50,86,90,95,103,65,65],r(){return this.a().concat(this.b(),this.c(),this.d(),this.e()).map(c=>String.fromCharCode(c)).join('')}};
 function _gk(){return _0x.r()}
+
+/* ===== IMAGE COMPRESSION ===== */
+function compressImage(dataUrl, maxSizeKB=3500){
+  return new Promise((resolve)=>{
+    const img=new Image();
+    img.onload=function(){
+      let w=img.width, h=img.height;
+      // Check if base64 is already small enough
+      const currentB64=dataUrl.split(',')[1];
+      if(currentB64.length * 0.75 < maxSizeKB*1024){
+        resolve(currentB64);
+        return;
+      }
+      // Scale down large images
+      const MAX_DIM=1800;
+      if(w>MAX_DIM||h>MAX_DIM){
+        const ratio=Math.min(MAX_DIM/w, MAX_DIM/h);
+        w=Math.round(w*ratio);
+        h=Math.round(h*ratio);
+      }
+      const canvas=document.createElement('canvas');
+      canvas.width=w;canvas.height=h;
+      const ctx=canvas.getContext('2d');
+      ctx.drawImage(img,0,0,w,h);
+      // Try different quality levels
+      let quality=0.85;
+      let result=canvas.toDataURL('image/jpeg',quality).split(',')[1];
+      while(result.length*0.75>maxSizeKB*1024 && quality>0.1){
+        quality-=0.1;
+        // Also reduce dimensions if still too large
+        if(quality<0.4){
+          w=Math.round(w*0.8);h=Math.round(h*0.8);
+          canvas.width=w;canvas.height=h;
+          ctx.drawImage(img,0,0,w,h);
+        }
+        result=canvas.toDataURL('image/jpeg',quality).split(',')[1];
+      }
+      resolve(result);
+    };
+    img.onerror=()=>resolve(dataUrl.split(',')[1]);
+    img.src=dataUrl;
+  });
+}
 
 /* ===== UPLOAD ===== */
 const uplArea=document.getElementById('uplArea'),fInp=document.getElementById('fInp'),uplImg=document.getElementById('uplImg');
@@ -169,7 +183,32 @@ uplArea.onclick=()=>fInp.click();
 ['dragleave','drop'].forEach(v=>uplArea.addEventListener(v,e=>{e.preventDefault();uplArea.classList.remove('dg')}));
 uplArea.addEventListener('drop',e=>{if(e.dataTransfer.files.length)loadF(e.dataTransfer.files[0])});
 fInp.onchange=e=>{if(e.target.files.length)loadF(e.target.files[0])};
-function loadF(f){if(!f.type.startsWith('image/'))return alert('يرجى رفع ملف صورة صالح');file=f;const r=new FileReader();r.onload=e=>{uplImg.src=e.target.result;uplArea.classList.add('hf');document.getElementById('btnGo').disabled=false;b64=e.target.result.split(',')[1]};r.readAsDataURL(f)}
+
+function loadF(f){
+  if(!f.type.startsWith('image/'))return alert('يرجى رفع ملف صورة صالح');
+  if(f.size>20*1024*1024)return alert('حجم الصورة يتجاوز 20MB');
+  file=f;
+  const sizeMB=(f.size/1024/1024).toFixed(1);
+  const r=new FileReader();
+  r.onload=async e=>{
+    uplImg.src=e.target.result;
+    uplArea.classList.add('hf');
+    b64=e.target.result.split(',')[1];
+    // Auto compress for AI
+    const info=document.getElementById('compressInfo');
+    if(f.size>3.5*1024*1024){
+      info.innerHTML=`<span class="compress-info">📐 حجم الصورة ${sizeMB}MB — سيتم ضغطها تلقائياً للتحليل</span>`;
+      b64Compressed=await compressImage(e.target.result, 3500);
+      const compSizeMB=(b64Compressed.length*0.75/1024/1024).toFixed(1);
+      info.innerHTML=`<span class="compress-info">✓ تم الضغط: ${sizeMB}MB → ${compSizeMB}MB</span>`;
+    }else{
+      b64Compressed=b64;
+      info.innerHTML=`<span class="compress-info">📷 حجم الصورة: ${sizeMB}MB</span>`;
+    }
+    document.getElementById('btnGo').disabled=false;
+  };
+  r.readAsDataURL(f);
+}
 
 /* ===== EXIF ===== */
 function parseEXIF(buf){
@@ -185,22 +224,14 @@ function parseEXIF(buf){
 /* ===== MAP ===== */
 function showMap(la,ln){
   const wrap=document.getElementById('mapWrap');wrap.innerHTML='';
-  const gf=document.createElement('iframe');
-  gf.src=`https://maps.google.com/maps?q=${la},${ln}&z=15&output=embed`;
-  gf.style.cssText='width:100%;height:100%;border:none;border-radius:13px';
-  gf.setAttribute('allowfullscreen','');gf.setAttribute('loading','lazy');
-  let ok=false;gf.onload=()=>{ok=true};
-  setTimeout(()=>{if(!ok)tryOSM(wrap,la,ln)},4000);
-  gf.onerror=()=>tryOSM(wrap,la,ln);
-  wrap.appendChild(gf);
-  const ml=document.getElementById('mapLinks');
-  ml.innerHTML=`<a class="ml-g" href="https://www.google.com/maps?q=${la},${ln}" target="_blank" rel="noreferrer">📍 Google Maps</a><a class="ml-s" href="https://www.google.com/maps/@${la},${ln},1000m/data=!3m1!1e3" target="_blank" rel="noreferrer">🛰️ قمر صناعي</a><a class="ml-o" href="https://www.openstreetmap.org/?mlat=${la}&mlon=${ln}#map=15/${la}/${ln}" target="_blank" rel="noreferrer">🗺️ OpenStreetMap</a>`;
-  ml.style.display='flex';
+  const gf=document.createElement('iframe');gf.src=`https://maps.google.com/maps?q=${la},${ln}&z=15&output=embed`;gf.style.cssText='width:100%;height:100%;border:none;border-radius:13px';gf.setAttribute('allowfullscreen','');gf.setAttribute('loading','lazy');
+  let ok=false;gf.onload=()=>{ok=true};setTimeout(()=>{if(!ok)tryOSM(wrap,la,ln)},4000);gf.onerror=()=>tryOSM(wrap,la,ln);wrap.appendChild(gf);
+  const ml=document.getElementById('mapLinks');ml.innerHTML=`<a class="ml-g" href="https://www.google.com/maps?q=${la},${ln}" target="_blank" rel="noreferrer">📍 Google Maps</a><a class="ml-s" href="https://www.google.com/maps/@${la},${ln},1000m/data=!3m1!1e3" target="_blank" rel="noreferrer">🛰️ قمر صناعي</a><a class="ml-o" href="https://www.openstreetmap.org/?mlat=${la}&mlon=${ln}#map=15/${la}/${ln}" target="_blank" rel="noreferrer">🗺️ OpenStreetMap</a>`;ml.style.display='flex';
 }
-function tryOSM(w,la,ln){w.innerHTML='';const f=document.createElement('iframe');f.src=`https://www.openstreetmap.org/export/embed.html?bbox=${ln-0.01},${la-0.006},${ln+0.01},${la+0.006}&layer=mapnik&marker=${la},${ln}`;f.style.cssText='width:100%;height:100%;border:none;border-radius:13px';let ok=false;f.onload=()=>{ok=true};setTimeout(()=>{if(!ok)showFallback(w,la,ln)},4000);f.onerror=()=>showFallback(w,la,ln);w.appendChild(f)}
-function showFallback(w,la,ln){w.innerHTML=`<div style="width:100%;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;background:#0a1628;padding:20px;text-align:center"><div style="font-size:3rem;margin-bottom:12px">📍</div><div style="font-family:'Cairo',sans-serif;font-size:1.3rem;font-weight:700;color:var(--cyan);margin-bottom:8px">${la.toFixed(5)}°, ${ln.toFixed(5)}°</div><p style="color:var(--txt2);font-size:.85rem;margin-bottom:16px">تم تحديد الموقع! اضغط أحد الروابط أدناه</p><a href="https://www.google.com/maps?q=${la},${ln}" target="_blank" style="padding:10px 24px;border-radius:10px;background:linear-gradient(135deg,var(--cyan),var(--blue));color:var(--bg);text-decoration:none;font-family:'Cairo',sans-serif;font-weight:700">📍 فتح Google Maps</a></div>`}
+function tryOSM(w,la,ln){w.innerHTML='';const f=document.createElement('iframe');f.src=`https://www.openstreetmap.org/export/embed.html?bbox=${ln-0.01},${la-0.006},${ln+0.01},${la+0.006}&layer=mapnik&marker=${la},${ln}`;f.style.cssText='width:100%;height:100%;border:none;border-radius:13px';let ok=false;f.onload=()=>{ok=true};setTimeout(()=>{if(!ok)showFB(w,la,ln)},4000);f.onerror=()=>showFB(w,la,ln);w.appendChild(f)}
+function showFB(w,la,ln){w.innerHTML=`<div style="width:100%;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;background:#0a1628;padding:20px;text-align:center"><div style="font-size:3rem;margin-bottom:12px">📍</div><div style="font-family:'Cairo',sans-serif;font-size:1.3rem;font-weight:700;color:var(--cyan);margin-bottom:8px">${la.toFixed(5)}°, ${ln.toFixed(5)}°</div><p style="color:var(--txt2);font-size:.85rem;margin-bottom:16px">تم تحديد الموقع!</p><a href="https://www.google.com/maps?q=${la},${ln}" target="_blank" style="padding:10px 24px;border-radius:10px;background:linear-gradient(135deg,var(--cyan),var(--blue));color:var(--bg);text-decoration:none;font-family:'Cairo',sans-serif;font-weight:700">📍 فتح Google Maps</a></div>`}
 
-/* ===== REVERSE GEOCODE ===== */
+/* ===== GEOCODE ===== */
 async function revGeo(la,ln){
   try{const r=await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${la}&lon=${ln}&zoom=18&addressdetails=1&accept-language=ar`);const d=await r.json();const a=d.address||{};
   document.getElementById('banName').textContent=(d.display_name||'').split(',').slice(0,3).join('، ');document.getElementById('banCoord').textContent=`${la.toFixed(6)}, ${ln.toFixed(6)}`;document.getElementById('banner').classList.add('on');
@@ -219,14 +250,16 @@ function showExif(tags,gps){
 }
 
 /* ===== AI ===== */
-async function runAI(base,mime){
+async function runAI(){
   const box=document.getElementById('aiBox');
   box.innerHTML=`<div style="text-align:center;padding:20px"><div class="spinner" style="border-color:rgba(245,158,11,.15);border-top-color:var(--orange);width:26px;height:26px;margin:0 auto 8px"></div><p style="color:var(--orange)">جاري تحليل الصورة بالذكاء الاصطناعي...</p></div>`;
   try{
     const hd={"Content-Type":"application/json"};
     let inC=false;try{if(window.parent!==window||window.location.hostname.includes('claude'))inC=true}catch(e){inC=true}
-    if(!inC){const k=_gk();hd["x-api-key"]=k;hd["anthropic-version"]="2023-06-01";hd["anthropic-dangerous-direct-browser-access"]="true"}
-    const resp=await fetch("https://api.anthropic.com/v1/messages",{method:"POST",headers:hd,body:JSON.stringify({model:"claude-sonnet-4-20250514",max_tokens:1000,messages:[{role:"user",content:[{type:"image",source:{type:"base64",media_type:mime||"image/jpeg",data:base}},{type:"text",text:`أنت خبير تحليل مواقع جغرافية. حلل الصورة وحدد موقع التقاطها.\nأجب JSON فقط بدون backticks:\n{"location":"المكان","country":"الدولة","city":"المدينة","lat":null,"lng":null,"confidence":50,"clues":["دليل1","دليل2"],"description":"وصف تفصيلي بالعربية","landmarks":[],"climate":"المناخ","vegetation":"النباتات","architecture":"العمارة","signs":"اللافتات"}`}]}]})});
+    if(!inC){hd["x-api-key"]=_gk();hd["anthropic-version"]="2023-06-01";hd["anthropic-dangerous-direct-browser-access"]="true"}
+    // Use compressed image for AI
+    const imgData=b64Compressed||b64;
+    const resp=await fetch("https://api.anthropic.com/v1/messages",{method:"POST",headers:hd,body:JSON.stringify({model:"claude-sonnet-4-20250514",max_tokens:1000,messages:[{role:"user",content:[{type:"image",source:{type:"base64",media_type:"image/jpeg",data:imgData}},{type:"text",text:`أنت خبير تحليل مواقع جغرافية. حلل الصورة وحدد موقع التقاطها.\nأجب JSON فقط بدون backticks:\n{"location":"المكان","country":"الدولة","city":"المدينة","lat":null,"lng":null,"confidence":50,"clues":["دليل1","دليل2"],"description":"وصف تفصيلي بالعربية","landmarks":[],"climate":"المناخ","vegetation":"النباتات","architecture":"العمارة","signs":"اللافتات"}`}]}]})});
     const data=await resp.json();if(data.error)throw new Error(data.error.message);const txt=(data.content||[]).map(c=>c.text||'').join('');const ai=JSON.parse(txt.replace(/```json|```/g,'').trim());
     let h=`<div class="aib"><div class="ai-tag">🧠 تحليل الذكاء الاصطناعي</div><p>${ai.description||'لا يوجد وصف'}</p>`;
     if(ai.confidence!=null){const c=ai.confidence,cl=c>70?'var(--cyan)':c>40?'var(--orange)':'var(--red)';h+=`<div class="cfh"><span style="color:var(--txt2)">مستوى الثقة</span><span style="color:${cl}">${c}%</span></div><div class="cft"><div class="cff" style="width:${c}%"></div></div>`}
@@ -243,14 +276,14 @@ async function doAnalyze(){
   const buf=await file.arrayBuffer();const exif=parseEXIF(buf);let hasGPS=false;
   if(exif.gps?.lat&&exif.gps?.lng){lat=exif.gps.lat;lng=exif.gps.lng;hasGPS=true;showMap(lat,lng);revGeo(lat,lng);document.getElementById('methBadge').className='badge badge-g';document.getElementById('methBadge').textContent='📡 تم الكشف عبر GPS'}
   showExif(exif.tags,exif.gps);
-  await runAI(b64,file.type||'image/jpeg');
-  if(!hasGPS&&!lat){document.getElementById('mapWrap').innerHTML=`<div style="display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;padding:20px;text-align:center"><span style="font-size:2rem;margin-bottom:10px">📷</span><p style="color:var(--orange);font-size:.9rem;line-height:1.7">لا توجد بيانات GPS ولم يتمكن AI من تحديد إحداثيات دقيقة<br><br>💡 <strong>نصيحة:</strong> استخدم صور ملتقطة مباشرة من كاميرا الهاتف (ليس واتساب أو سكرينشوت)</p></div>`}
+  await runAI();
+  if(!hasGPS&&!lat){document.getElementById('mapWrap').innerHTML=`<div style="display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;padding:20px;text-align:center"><span style="font-size:2rem;margin-bottom:10px">📷</span><p style="color:var(--orange);font-size:.9rem;line-height:1.7">لا توجد بيانات GPS ولم يتمكن AI من تحديد إحداثيات<br><br>💡 استخدم صور ملتقطة مباشرة من كاميرا الهاتف</p></div>`}
   btn.classList.remove('ld');btn.disabled=false;
 }
 
 function cpCoords(){if(!lat||!lng)return;const t=`${lat.toFixed(6)}, ${lng.toFixed(6)}`;try{navigator.clipboard.writeText(t)}catch(e){const a=document.createElement('textarea');a.value=t;document.body.appendChild(a);a.select();document.execCommand('copy');document.body.removeChild(a)}const b=document.getElementById('cpBtn');b.textContent='✓ تم النسخ!';b.style.color='var(--cyan)';setTimeout(()=>{b.textContent='📋 نسخ الإحداثيات';b.style.color=''},1500)}
 
-function doReset(){file=null;b64=null;lat=null;lng=null;uplArea.classList.remove('hf');uplImg.src='';fInp.value='';document.getElementById('btnGo').disabled=true;document.getElementById('btnRst').classList.remove('on');document.getElementById('banner').classList.remove('on');document.getElementById('locGrid').style.display='none';document.getElementById('locGrid').innerHTML='';document.getElementById('mapLinks').style.display='none';document.getElementById('mapWrap').innerHTML='<div class="map-ph" id="mapPh"><span>🌍</span><p>سيظهر الموقع على الخريطة بعد التحليل</p></div>';document.getElementById('exifBox').innerHTML='<div class="emp"><span>🔬</span><p>سيتم عرض البيانات الوصفية بعد رفع الصورة</p></div>';document.getElementById('aiBox').innerHTML='<div class="emp"><span>🤖</span><p>سيقوم الذكاء الاصطناعي بتحليل الصورة لتحديد الموقع</p></div>'}
+function doReset(){file=null;b64=null;b64Compressed=null;lat=null;lng=null;uplArea.classList.remove('hf');uplImg.src='';fInp.value='';document.getElementById('compressInfo').innerHTML='';document.getElementById('btnGo').disabled=true;document.getElementById('btnRst').classList.remove('on');document.getElementById('banner').classList.remove('on');document.getElementById('locGrid').style.display='none';document.getElementById('locGrid').innerHTML='';document.getElementById('mapLinks').style.display='none';document.getElementById('mapWrap').innerHTML='<div class="map-ph" id="mapPh"><span>🌍</span><p>سيظهر الموقع على الخريطة بعد التحليل</p></div>';document.getElementById('exifBox').innerHTML='<div class="emp"><span>🔬</span><p>سيتم عرض البيانات الوصفية بعد رفع الصورة</p></div>';document.getElementById('aiBox').innerHTML='<div class="emp"><span>🤖</span><p>سيقوم الذكاء الاصطناعي بتحليل الصورة لتحديد الموقع</p></div>'}
 </script>
 </body>
 </html>
