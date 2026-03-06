@@ -3,287 +3,288 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>كاشف الموقع | Photo Location Detector</title>
-<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&family=Tajawal:wght@300;400;500;700&display=swap" rel="stylesheet">
+<title>OSINT محلل الصور الجنائي | Forensic Photo Intelligence</title>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&family=IBM+Plex+Mono:wght@400;500;600&family=Tajawal:wght@300;400;500;700&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#060a13;--card:#0c1322;--card2:#151d2e;--cyan:#00e8a2;--blue:#0ea5e9;--orange:#f59e0b;--red:#ef4444;--gold:#fbbf24;--txt:#e2e8f0;--txt2:#7c8ba5;--txt3:#3e4a60;--brd:rgba(0,232,162,0.1);--brd2:rgba(0,232,162,0.3)}
+:root{--bg:#03060d;--card:#080d1a;--card2:#0e1628;--cyan:#00ffc8;--blue:#0095ff;--orange:#ff8c00;--red:#ff3b5c;--gold:#ffd000;--green:#00e87b;--purple:#b06cff;--pink:#ff6eb4;--txt:#dfe6f0;--txt2:#6b7a94;--txt3:#2d3a50;--brd:rgba(0,255,200,0.08);--brd2:rgba(0,255,200,0.25)}
 *{margin:0;padding:0;box-sizing:border-box}
-body{font-family:'Tajawal',sans-serif;background:var(--bg);color:var(--txt);min-height:100vh;-webkit-user-select:none;-moz-user-select:none;user-select:none}
-.bg-fx{position:fixed;inset:0;z-index:0;pointer-events:none;background:radial-gradient(ellipse 500px 400px at 15% 10%,rgba(0,232,162,0.05),transparent),radial-gradient(ellipse 400px 400px at 85% 85%,rgba(14,165,233,0.04),transparent)}
-.wrap{position:relative;z-index:1;max-width:1440px;margin:0 auto;padding:16px}
-.hdr{text-align:center;padding:24px 0 18px}
-.hdr-ico{display:inline-flex;align-items:center;justify-content:center;width:64px;height:64px;border-radius:16px;margin-bottom:12px;background:linear-gradient(135deg,var(--cyan),var(--blue));box-shadow:0 0 30px rgba(0,232,162,0.25);font-size:26px;color:var(--bg);animation:glow 3s ease-in-out infinite}
-@keyframes glow{0%,100%{box-shadow:0 0 20px rgba(0,232,162,0.2)}50%{box-shadow:0 0 40px rgba(0,232,162,0.4)}}
-.hdr h1{font-family:'Cairo',sans-serif;font-size:2.3rem;font-weight:900;background:linear-gradient(135deg,var(--cyan),#fff,var(--gold));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
-.hdr>p{color:var(--txt2);font-size:.92rem;margin-top:4px}
-.banner{display:none;background:var(--card);border:1px solid var(--brd2);border-radius:14px;padding:14px 20px;margin-bottom:16px;animation:fd .5s ease}
+body{font-family:'Tajawal',sans-serif;background:var(--bg);color:var(--txt);min-height:100vh;-webkit-user-select:none;user-select:none}
+body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:9998;background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,255,200,0.006) 2px,rgba(0,255,200,0.006) 4px)}
+.bg-g{position:fixed;inset:0;z-index:0;pointer-events:none;background-image:linear-gradient(rgba(0,255,200,0.02) 1px,transparent 1px),linear-gradient(90deg,rgba(0,255,200,0.02) 1px,transparent 1px);background-size:50px 50px}
+.bg-o{position:fixed;inset:0;z-index:0;pointer-events:none;background:radial-gradient(ellipse 600px 400px at 10% 10%,rgba(0,255,200,0.04),transparent),radial-gradient(ellipse 400px 400px at 90% 90%,rgba(0,149,255,0.03),transparent)}
+.wrap{position:relative;z-index:1;max-width:1500px;margin:0 auto;padding:12px}
+.hdr{text-align:center;padding:18px 0 14px}
+.hdr-badge{display:inline-flex;align-items:center;gap:5px;padding:3px 12px;border-radius:4px;font-size:.62rem;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;font-family:'IBM Plex Mono',monospace;background:rgba(255,59,92,0.1);border:1px solid rgba(255,59,92,0.25);color:var(--red);margin-bottom:8px}
+.hdr-ico{display:inline-flex;align-items:center;justify-content:center;width:52px;height:52px;border-radius:13px;margin-bottom:8px;background:linear-gradient(135deg,var(--cyan),var(--blue));font-size:22px;color:var(--bg)}
+.hdr h1{font-family:'Cairo',sans-serif;font-size:1.8rem;font-weight:900;background:linear-gradient(135deg,var(--cyan),#fff 40%,var(--gold));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.hdr>p{color:var(--txt2);font-size:.75rem;font-family:'IBM Plex Mono',monospace}
+.sbar{display:flex;align-items:center;justify-content:center;gap:14px;padding:6px;margin-bottom:12px;flex-wrap:wrap}
+.si{display:flex;align-items:center;gap:3px;font-size:.64rem;font-family:'IBM Plex Mono',monospace;color:var(--txt2)}
+.sd{width:5px;height:5px;border-radius:50%;background:var(--green);animation:bl 2s ease-in-out infinite}
+@keyframes bl{0%,100%{opacity:1}50%{opacity:.3}}
+.banner{display:none;background:var(--card);border:1px solid var(--brd2);border-radius:10px;padding:12px 16px;margin-bottom:12px;animation:fd .4s ease}
 .banner.on{display:block}
-@keyframes fd{from{opacity:0;transform:translateY(-10px)}to{opacity:1;transform:translateY(0)}}
-.ban-row{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px}
-.ban-name{font-family:'Cairo',sans-serif;font-size:1.15rem;font-weight:700;margin-top:3px}
-.ban-coord{font-size:.8rem;color:var(--txt2);font-family:monospace;direction:ltr}
-.badge{display:inline-flex;align-items:center;gap:5px;padding:3px 11px;border-radius:16px;font-size:.76rem;font-weight:600}
-.badge-g{background:rgba(0,232,162,0.12);color:var(--cyan)}.badge-a{background:rgba(245,158,11,0.12);color:var(--orange)}
-.cpbtn{margin-top:3px;background:var(--card2);border:1px solid var(--brd);color:var(--txt2);padding:4px 11px;border-radius:7px;cursor:pointer;font-size:.76rem;font-family:'Tajawal',sans-serif;transition:.2s}
-.cpbtn:hover{border-color:var(--cyan);color:var(--cyan)}
-.grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
-@media(max-width:960px){.grid{grid-template-columns:1fr}}
-.crd{background:var(--card);border:1px solid var(--brd);border-radius:16px;padding:22px;position:relative;overflow:hidden}
-.crd::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--cyan),var(--blue));opacity:.5}
-.crd-h{font-family:'Cairo',sans-serif;font-size:1.1rem;font-weight:700;color:var(--cyan);margin-bottom:16px;display:flex;align-items:center;gap:9px}
-.crd-h .ib{width:32px;height:32px;display:flex;align-items:center;justify-content:center;background:rgba(0,232,162,0.08);border-radius:9px;font-size:1rem}
-.upl{border:2px dashed rgba(0,232,162,0.2);border-radius:13px;padding:36px 20px;text-align:center;cursor:pointer;transition:.3s;background:rgba(0,232,162,0.01)}
-.upl:hover,.upl.dg{border-color:var(--cyan);background:rgba(0,232,162,0.04)}
-.upl.hf{padding:12px}.upl.hf .upl-p{display:none}.upl.hf .upl-img{display:block}
-.upl h3{font-family:'Cairo',sans-serif;font-size:1.02rem;margin-bottom:4px}
-.upl .hn{color:var(--txt2);font-size:.8rem}.upl input{display:none}
-.upl-img{display:none;max-width:100%;max-height:260px;border-radius:9px;margin:0 auto;object-fit:contain}
-.btn-go{width:100%;padding:13px;margin-top:14px;border:none;border-radius:11px;font-family:'Cairo',sans-serif;font-size:1.02rem;font-weight:700;cursor:pointer;background:linear-gradient(135deg,var(--cyan),var(--blue));color:var(--bg);display:flex;align-items:center;justify-content:center;gap:8px;transition:.3s}
-.btn-go:hover:not(:disabled){transform:translateY(-2px);box-shadow:0 5px 20px rgba(0,232,162,0.25)}
-.btn-go:disabled{opacity:.35;cursor:not-allowed}
-.btn-go .spn{display:none}.btn-go.ld .spn{display:inline-block}.btn-go.ld .bl{display:none}
-.spinner{display:inline-block;width:18px;height:18px;border:3px solid rgba(6,10,19,0.2);border-top-color:var(--bg);border-radius:50%;animation:sp .7s linear infinite}
-@keyframes sp{to{transform:rotate(360deg)}}
-.btn-rst{display:none;margin:10px auto 0;background:rgba(239,68,68,0.08);border:1px solid rgba(239,68,68,0.22);color:var(--red);padding:6px 16px;border-radius:9px;cursor:pointer;font-family:'Tajawal',sans-serif;font-size:.8rem}.btn-rst.on{display:block}
-.map-wrap{width:100%;height:420px;border-radius:13px;overflow:hidden;background:#111b2e;border:1px solid var(--brd);position:relative}
-.map-wrap iframe{width:100%;height:100%;border:none;border-radius:13px;display:block}
-.map-ph{display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;color:var(--txt3);gap:8px}.map-ph span{font-size:2.4rem;opacity:.3}
-.map-links{display:none;gap:8px;margin-top:10px;flex-wrap:wrap}
-.map-links a{padding:6px 14px;border-radius:8px;text-decoration:none;font-size:.8rem;font-family:'Tajawal',sans-serif;transition:.2s;display:inline-flex;align-items:center;gap:4px}
-.ml-g{background:rgba(0,232,162,0.08);border:1px solid rgba(0,232,162,0.2);color:var(--cyan)}.ml-g:hover{background:rgba(0,232,162,0.15)}
-.ml-o{background:rgba(14,165,233,0.08);border:1px solid rgba(14,165,233,0.2);color:var(--blue)}.ml-o:hover{background:rgba(14,165,233,0.15)}
-.ml-s{background:rgba(245,158,11,0.08);border:1px solid rgba(245,158,11,0.2);color:var(--orange)}.ml-s:hover{background:rgba(245,158,11,0.15)}
-.loc-grid{display:none;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px;margin-top:12px}
-.di{background:var(--card2);border:1px solid var(--brd);border-radius:9px;padding:10px 12px;transition:.2s}
-.di:hover{border-color:var(--brd2);transform:translateX(-2px)}
-.dl{font-size:.73rem;color:var(--txt2);margin-bottom:2px}.dv{font-family:'Cairo',sans-serif;font-weight:600;font-size:.88rem;word-break:break-word}.dv.gd{color:var(--gold)}
-.gps-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px}
-.exif-row{display:flex;justify-content:space-between;padding:7px 10px;border-bottom:1px solid rgba(255,255,255,0.03);font-size:.82rem}
-.exif-row .lbl{color:var(--txt2)}.exif-row .val{font-weight:500;direction:ltr}
-.aib{background:var(--card2);border:1px solid rgba(245,158,11,0.13);border-radius:11px;padding:16px;position:relative}
-.aib::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--orange),var(--gold))}
-.ai-tag{display:inline-flex;align-items:center;gap:4px;background:rgba(245,158,11,0.1);color:var(--orange);padding:3px 10px;border-radius:14px;font-size:.73rem;font-weight:600;margin-bottom:8px}
-.aib>p{line-height:1.8;font-size:.88rem}
-.cfh{display:flex;justify-content:space-between;font-size:.76rem;margin-bottom:4px;margin-top:12px}
-.cft{width:100%;height:6px;background:rgba(255,255,255,0.04);border-radius:3px;overflow:hidden}
-.cff{height:100%;border-radius:3px;background:linear-gradient(90deg,var(--red),var(--orange),var(--cyan));transition:width 1.2s ease-out}
-.cl-list{margin:5px 0 0;padding-right:16px}.cl-list li{margin-bottom:4px;font-size:.84rem;line-height:1.6}
-.exg{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}
-@media(max-width:600px){.exg{grid-template-columns:1fr}}
-.emp{text-align:center;padding:24px;color:var(--txt3)}.emp span{font-size:1.8rem;display:block;margin-bottom:8px;opacity:.25}
-.compress-info{display:inline-block;padding:3px 10px;border-radius:10px;font-size:.7rem;background:rgba(14,165,233,0.1);color:var(--blue);margin-top:6px}
+@keyframes fd{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:translateY(0)}}
+.br{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px}
+.bn{font-family:'Cairo',sans-serif;font-size:1.05rem;font-weight:700;margin-top:2px}
+.bc{font-size:.72rem;color:var(--txt2);font-family:'IBM Plex Mono',monospace;direction:ltr}
+.bdg{display:inline-flex;align-items:center;gap:4px;padding:2px 8px;border-radius:3px;font-size:.65rem;font-weight:600;font-family:'IBM Plex Mono',monospace;letter-spacing:.5px}
+.bdg-g{background:rgba(0,232,123,0.1);border:1px solid rgba(0,232,123,0.25);color:var(--green)}
+.bdg-a{background:rgba(176,108,255,0.1);border:1px solid rgba(176,108,255,0.25);color:var(--purple)}
+.cb{background:var(--card2);border:1px solid var(--brd);color:var(--txt2);padding:3px 8px;border-radius:3px;cursor:pointer;font-size:.65rem;font-family:'IBM Plex Mono',monospace}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-top:12px}
+.g4{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:12px;margin-top:12px}
+@media(max-width:1200px){.g4{grid-template-columns:1fr 1fr}}
+@media(max-width:1100px){.g3{grid-template-columns:1fr 1fr}}
+@media(max-width:960px){.g2,.g3,.g4{grid-template-columns:1fr}}
+.c{background:var(--card);border:1px solid var(--brd);border-radius:10px;padding:16px;position:relative;overflow:hidden}
+.c::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,var(--cyan),var(--blue));opacity:.35}
+.ch{font-family:'Cairo',sans-serif;font-size:.9rem;font-weight:700;color:var(--cyan);margin-bottom:12px;display:flex;align-items:center;gap:7px}
+.ch .ib{width:26px;height:26px;display:flex;align-items:center;justify-content:center;background:rgba(0,255,200,0.06);border-radius:6px;font-size:.8rem}
+.ch .tg{margin-right:auto;font-size:.55rem;font-family:'IBM Plex Mono',monospace;padding:1px 6px;border-radius:2px;letter-spacing:.5px}
+.tg-b{background:rgba(0,149,255,0.1);border:1px solid rgba(0,149,255,0.15);color:var(--blue)}
+.tg-r{background:rgba(255,59,92,0.1);border:1px solid rgba(255,59,92,0.15);color:var(--red)}
+.tg-o{background:rgba(255,140,0,0.1);border:1px solid rgba(255,140,0,0.15);color:var(--orange)}
+.tg-g{background:rgba(0,232,123,0.1);border:1px solid rgba(0,232,123,0.15);color:var(--green)}
+.tg-p{background:rgba(176,108,255,0.1);border:1px solid rgba(176,108,255,0.15);color:var(--purple)}
+.tg-pk{background:rgba(255,110,180,0.1);border:1px solid rgba(255,110,180,0.15);color:var(--pink)}
+.upl{border:1px dashed rgba(0,255,200,0.12);border-radius:8px;padding:28px 14px;text-align:center;cursor:pointer;transition:.3s;background:rgba(0,255,200,0.008)}
+.upl:hover{border-color:var(--cyan);background:rgba(0,255,200,0.02)}
+.upl.hf{padding:8px}.upl.hf .up{display:none}.upl.hf .ui{display:block}
+.upl h3{font-family:'Cairo',sans-serif;font-size:.9rem;margin-bottom:2px}
+.upl .hn{color:var(--txt2);font-size:.7rem}.upl input{display:none}
+.ui{display:none;max-width:100%;max-height:220px;border-radius:6px;margin:0 auto;object-fit:contain}
+.bg{width:100%;padding:11px;margin-top:10px;border:none;border-radius:7px;font-family:'Cairo',sans-serif;font-size:.9rem;font-weight:700;cursor:pointer;background:linear-gradient(135deg,var(--cyan),var(--blue));color:var(--bg);display:flex;align-items:center;justify-content:center;gap:6px;transition:.3s}
+.bg:hover:not(:disabled){transform:translateY(-1px);box-shadow:0 3px 16px rgba(0,255,200,0.2)}
+.bg:disabled{opacity:.3;cursor:not-allowed}
+.bg .sp{display:none}.bg.ld .sp{display:inline-block}.bg.ld .bl{display:none}
+.spi{display:inline-block;width:14px;height:14px;border:2px solid rgba(3,6,13,0.2);border-top-color:var(--bg);border-radius:50%;animation:s .7s linear infinite}
+@keyframes s{to{transform:rotate(360deg)}}
+.br2{display:none;margin:6px auto 0;background:none;border:1px solid rgba(255,59,92,0.15);color:var(--red);padding:4px 12px;border-radius:4px;cursor:pointer;font-family:'Tajawal',sans-serif;font-size:.7rem}.br2.on{display:block}
+.ci{display:inline-block;padding:2px 6px;border-radius:3px;font-size:.6rem;font-family:'IBM Plex Mono',monospace;background:rgba(0,149,255,0.06);color:var(--blue);margin-top:3px}
+.mw{width:100%;height:350px;border-radius:8px;overflow:hidden;background:var(--card2);border:1px solid var(--brd)}
+.mw iframe{width:100%;height:100%;border:none}
+.mp{display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;color:var(--txt3);gap:5px;font-size:.75rem}
+.mp span{font-size:1.8rem;opacity:.25}
+.ml{display:none;gap:5px;margin-top:6px;flex-wrap:wrap}
+.ml a{padding:3px 8px;border-radius:3px;text-decoration:none;font-size:.65rem;font-family:'IBM Plex Mono',monospace}
+.ma{background:rgba(0,255,200,0.06);border:1px solid rgba(0,255,200,0.12);color:var(--cyan)}
+.mb{background:rgba(0,149,255,0.06);border:1px solid rgba(0,149,255,0.12);color:var(--blue)}
+.mc{background:rgba(255,140,0,0.06);border:1px solid rgba(255,140,0,0.12);color:var(--orange)}
+.lg{display:none;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:5px;margin-top:8px}
+.di{background:var(--card2);border:1px solid var(--brd);border-radius:6px;padding:7px 9px;transition:.15s}
+.di:hover{border-color:var(--brd2)}
+.dl{font-size:.6rem;color:var(--txt2);margin-bottom:1px;font-family:'IBM Plex Mono',monospace;letter-spacing:.3px}
+.dv{font-family:'Cairo',sans-serif;font-weight:600;font-size:.78rem;word-break:break-word}
+.gd{color:var(--gold)}.cy{color:var(--cyan)}.rd{color:var(--red)}.gn{color:var(--green)}.pr{color:var(--purple)}.pk{color:var(--pink)}.or{color:var(--orange)}
+.gg{display:grid;grid-template-columns:1fr 1fr;gap:5px;margin-bottom:8px}
+.er{display:flex;justify-content:space-between;padding:4px 7px;border-bottom:1px solid rgba(255,255,255,0.02);font-size:.74rem}
+.er .l{color:var(--txt2);font-size:.68rem}.er .v{font-weight:500;direction:ltr;font-family:'IBM Plex Mono',monospace;font-size:.7rem}
+.fb{background:var(--card2);border:1px solid var(--brd);border-radius:6px;padding:12px;position:relative}
+.fb::before{content:'';position:absolute;top:0;left:0;right:0;height:1px}
+.fb1::before{background:linear-gradient(90deg,var(--orange),var(--gold))}
+.fb2::before{background:linear-gradient(90deg,var(--blue),var(--cyan))}
+.fb3::before{background:linear-gradient(90deg,var(--red),var(--purple))}
+.fb4::before{background:linear-gradient(90deg,var(--green),var(--cyan))}
+.fb5::before{background:linear-gradient(90deg,var(--pink),var(--purple))}
+.fb6::before{background:linear-gradient(90deg,var(--gold),var(--orange))}
+.st{display:inline-flex;align-items:center;gap:3px;padding:2px 7px;border-radius:3px;font-size:.6rem;font-weight:600;font-family:'IBM Plex Mono',monospace;letter-spacing:.5px;margin-bottom:6px}
+.fb p{line-height:1.7;font-size:.8rem}
+.el{margin:6px 0 0;padding-right:12px}.el li{margin-bottom:4px;font-size:.78rem;line-height:1.55}
+.cfh{display:flex;justify-content:space-between;font-size:.68rem;margin:8px 0 3px;font-family:'IBM Plex Mono',monospace}
+.cft{width:100%;height:4px;background:rgba(255,255,255,0.03);border-radius:2px;overflow:hidden}
+.cff{height:100%;border-radius:2px;transition:width 1s ease-out}
+.eg{display:grid;grid-template-columns:1fr 1fr;gap:5px;margin-top:8px}
+@media(max-width:600px){.eg{grid-template-columns:1fr}}
+.em{text-align:center;padding:16px;color:var(--txt3)}.em span{font-size:1.3rem;display:block;margin-bottom:4px;opacity:.2}.em p{font-size:.75rem}
+.tb{display:flex;gap:2px;margin-top:6px}.ts{height:5px;flex:1;border-radius:2px;background:var(--card2)}.ts.tl{background:var(--green)}.ts.tm{background:var(--orange)}.ts.th{background:var(--red)}
+.auth-meter{display:flex;align-items:center;gap:8px;margin-top:8px;padding:8px 10px;background:rgba(0,0,0,0.2);border-radius:6px}
+.auth-icon{font-size:1.5rem}
+.auth-label{font-family:'Cairo',sans-serif;font-weight:700;font-size:.85rem}
+.auth-sub{font-size:.7rem;color:var(--txt2)}
+.ftr{text-align:center;padding:12px 0 6px;color:var(--txt3);font-size:.6rem;font-family:'IBM Plex Mono',monospace;letter-spacing:.5px}
 </style>
 </head>
 <body>
-<div class="bg-fx"></div>
+<div class="bg-g"></div><div class="bg-o"></div>
 <div class="wrap">
 <div class="hdr">
-<div class="hdr-ico">✦</div>
-<h1>كاشف الموقع</h1>
-<p>اكتشف الموقع الحقيقي لالتقاط أي صورة عبر بيانات GPS والذكاء الاصطناعي</p>
-<p style="color:var(--txt3);font-size:.78rem;margin-top:4px">يدعم صور حتى 20MB — يتم ضغطها تلقائياً للتحليل</p>
+<div class="hdr-badge">⚡ FORENSIC INTELLIGENCE PLATFORM v3.0</div><br>
+<div class="hdr-ico">🔬</div>
+<h1>محلل الصور الجنائي</h1>
+<p>OSINT • Shadow Analysis • AI Detection • Deep Visual Forensics</p>
+</div>
+<div class="sbar">
+<div class="si"><div class="sd"></div> EXIF</div><div class="si"><div class="sd"></div> GPS</div><div class="si"><div class="sd"></div> AI Engine</div><div class="si"><div class="sd"></div> Shadow</div><div class="si"><div class="sd"></div> Weather</div><div class="si"><div class="sd"></div> OSINT</div><div class="si"><div class="sd"></div> Authenticity</div><div class="si"><div class="sd"></div> AI Detection</div>
+</div>
+<div class="banner" id="ban"><div class="br"><div><div id="mb" class="bdg bdg-g">📡 GPS</div><div class="bn" id="bN">—</div></div><div style="text-align:left"><span class="bc" id="bC">—</span><br><button class="cb" id="cpB" onclick="cp()">📋 COPY</button></div></div></div>
+
+<div class="g2">
+<div class="c"><div class="ch"><span class="ib">📁</span> رفع الصورة <span class="tg tg-b">INPUT</span></div>
+<div class="upl" id="uA"><input type="file" id="fI" accept="image/*"><div class="up"><div style="font-size:1.8rem;margin-bottom:4px">🎯</div><h3>اسحب الصورة أو انقر للرفع</h3><p class="hn">حتى 20MB — ضغط تلقائي</p></div><img class="ui" id="uI" alt=""></div>
+<div id="cI"></div>
+<button class="bg" id="bG" disabled onclick="run()"><div class="sp"><div class="spi"></div></div><span class="bl">🔍 بدء التحليل الجنائي الشامل</span></button>
+<button class="br2" id="bR" onclick="rst()">↺ تحليل جديد</button></div>
+
+<div class="c"><div class="ch"><span class="ib">🗺️</span> الموقع الجغرافي <span class="tg tg-b">GEOLOCATION</span></div>
+<div class="mw" id="mW"><div class="mp" id="mP"><span>🌐</span><p>في انتظار البيانات...</p></div></div>
+<div class="ml" id="mL"></div><div class="lg" id="lG"></div></div>
 </div>
 
-<div class="banner" id="banner">
-<div class="ban-row">
-<div><div id="methBadge" class="badge badge-g">📡 GPS</div><div class="ban-name" id="banName">—</div></div>
-<div style="text-align:left"><span class="ban-coord" id="banCoord">—</span><br><button class="cpbtn" id="cpBtn" onclick="cpCoords()">📋 نسخ الإحداثيات</button></div>
-</div>
-</div>
-
-<div class="grid">
-<div class="crd">
-<div class="crd-h"><span class="ib">☁️</span> رفع الصورة</div>
-<div class="upl" id="uplArea"><input type="file" id="fInp" accept="image/*">
-<div class="upl-p"><div style="font-size:2.4rem;margin-bottom:8px">🖼️</div><h3>اسحب الصورة هنا أو انقر للرفع</h3><p class="hn">PNG, JPG, JPEG, TIFF — حتى 20MB</p></div>
-<img class="upl-img" id="uplImg" alt="معاينة"></div>
-<div id="compressInfo"></div>
-<button class="btn-go" id="btnGo" disabled onclick="doAnalyze()"><div class="spn"><div class="spinner"></div></div><span class="bl">🔍 تحليل وكشف الموقع</span></button>
-<button class="btn-rst" id="btnRst" onclick="doReset()">🔄 تحليل صورة جديدة</button>
+<!-- Row 2: Authenticity + AI Detection -->
+<div class="g2" style="margin-top:12px" id="r2" style="display:none">
+<div class="c"><div class="ch"><span class="ib">🛡️</span> تحقق الأصالة <span class="tg tg-r">AUTHENTICITY</span></div><div id="authBox"><div class="em"><span>🔐</span><p>كشف التلاعب والتعديل</p></div></div></div>
+<div class="c"><div class="ch"><span class="ib">🤖</span> كشف صور AI <span class="tg tg-p">AI DETECTION</span></div><div id="aiDetBox"><div class="em"><span>🧬</span><p>هل الصورة مولدة بالذكاء الاصطناعي؟</p></div></div></div>
 </div>
 
-<div class="crd">
-<div class="crd-h"><span class="ib">🗺️</span> خريطة الموقع</div>
-<div class="map-wrap" id="mapWrap"><div class="map-ph" id="mapPh"><span>🌍</span><p>سيظهر الموقع على الخريطة بعد التحليل</p></div></div>
-<div class="map-links" id="mapLinks"></div>
-<div class="loc-grid" id="locGrid"></div>
+<!-- Row 3: Shadow + Weather + OSINT -->
+<div class="g3" id="r3" style="display:none">
+<div class="c"><div class="ch"><span class="ib">☀️</span> الظلال والشمس <span class="tg tg-o">SHADOW</span></div><div id="shBox"><div class="em"><span>🌓</span><p>تحليل الظلال</p></div></div></div>
+<div class="c"><div class="ch"><span class="ib">🌤️</span> الطقس <span class="tg tg-b">WEATHER</span></div><div id="wxBox"><div class="em"><span>🌡️</span><p>حالة الطقس</p></div></div></div>
+<div class="c"><div class="ch"><span class="ib">🕵️</span> OSINT <span class="tg tg-r">INTELLIGENCE</span></div><div id="osBox"><div class="em"><span>🔎</span><p>التحليل الاستخباراتي</p></div></div></div>
 </div>
 
-<div class="crd">
-<div class="crd-h"><span class="ib">📊</span> البيانات الوصفية (EXIF)</div>
-<div id="exifBox"><div class="emp"><span>🔬</span><p>سيتم عرض البيانات الوصفية بعد رفع الصورة</p></div></div>
+<!-- Row 4: Buildings + Landmarks + Terrain + Vegetation -->
+<div class="g4" id="r4" style="display:none">
+<div class="c"><div class="ch"><span class="ib">🏢</span> المباني <span class="tg tg-o">BUILDINGS</span></div><div id="bldBox"><div class="em"><span>🏗️</span><p>تحليل المباني</p></div></div></div>
+<div class="c"><div class="ch"><span class="ib">🏛️</span> المعالم <span class="tg tg-g">LANDMARKS</span></div><div id="lmBox"><div class="em"><span>📍</span><p>المعالم والأماكن</p></div></div></div>
+<div class="c"><div class="ch"><span class="ib">⛰️</span> التضاريس <span class="tg tg-pk">TERRAIN</span></div><div id="trBox"><div class="em"><span>🗻</span><p>تحليل التضاريس</p></div></div></div>
+<div class="c"><div class="ch"><span class="ib">🌿</span> النباتات <span class="tg tg-g">FLORA</span></div><div id="flBox"><div class="em"><span>🌳</span><p>تحليل الغطاء النباتي</p></div></div></div>
 </div>
 
-<div class="crd">
-<div class="crd-h"><span class="ib">🧠</span> تحليل الذكاء الاصطناعي</div>
-<div id="aiBox"><div class="emp"><span>🤖</span><p>سيقوم الذكاء الاصطناعي بتحليل الصورة لتحديد الموقع</p></div></div>
+<!-- Row 5: EXIF + Final Report -->
+<div class="g2" style="margin-top:12px">
+<div class="c"><div class="ch"><span class="ib">📊</span> EXIF <span class="tg tg-b">METADATA</span></div><div id="exBox"><div class="em"><span>🔬</span><p>البيانات الوصفية</p></div></div></div>
+<div class="c"><div class="ch"><span class="ib">📋</span> التقرير النهائي <span class="tg tg-g">FINAL REPORT</span></div><div id="rpBox"><div class="em"><span>📝</span><p>التقرير الجنائي الشامل</p></div></div></div>
 </div>
-</div>
-<div style="text-align:center;padding:20px 0 10px;color:var(--txt3);font-size:.72rem">صُنع بواسطة إبراهيم العلوي | كاشف الموقع v2.0</div>
+<div class="ftr">صُنع بواسطة إبراهيم العلوي | OSINT Forensic Intelligence v3.0</div>
 </div>
 
 <script>
-/* ===== PROTECTION ===== */
 !function(){document.addEventListener('contextmenu',e=>e.preventDefault());document.addEventListener('keydown',e=>{if(e.key==='F12'||(e.ctrlKey&&e.shiftKey&&/[IJCijc]/.test(e.key))||(e.ctrlKey&&/[UuSs]/.test(e.key))){e.preventDefault();return false}})}();
+let file=null,b64=null,b64C=null,lat=null,lng=null;
+const _0x={a:()=>[115,107,45,97,110,116,45,97,112,105,48,51,45],b:()=>[85,74,115,86,84,57,68,84,110,45,73,114,109,84,72,73,103,85,86,56,90,112,109,116,118,45],c:()=>[104,108,104,105,49,52,65,77,100,78,110,109,71,74,104,80,105,45],d:()=>[101,74,49,79,110,69,90,117,100,67,118,82,98,107,78,107,108,113,116,100,90,101,85,113,115,106,75,113,68,81,80,108,97,121,103,119,86,71,104,90,54,103,45],e:()=>[77,50,86,90,95,103,65,65],r(){return[...this.a(),...this.b(),...this.c(),...this.d(),...this.e()].map(c=>String.fromCharCode(c)).join('')}};
+function _k(){return _0x.r()}
+function comp(du,mx=3500){return new Promise(r=>{const i=new Image();i.onload=function(){let w=i.width,h=i.height;const cb=du.split(',')[1];if(cb.length*.75<mx*1024){r(cb);return}const M=1600;if(w>M||h>M){const rt=Math.min(M/w,M/h);w=Math.round(w*rt);h=Math.round(h*rt)}const c=document.createElement('canvas');c.width=w;c.height=h;const x=c.getContext('2d');x.drawImage(i,0,0,w,h);let q=0.8,res=c.toDataURL('image/jpeg',q).split(',')[1];while(res.length*.75>mx*1024&&q>0.1){q-=0.1;if(q<0.35){w=Math.round(w*0.75);h=Math.round(h*0.75);c.width=w;c.height=h;x.drawImage(i,0,0,w,h)}res=c.toDataURL('image/jpeg',q).split(',')[1]}r(res)};i.src=du})}
 
-/* ===== STATE ===== */
-let file=null,b64=null,b64Compressed=null,lat=null,lng=null;
+const uA=document.getElementById('uA'),fI=document.getElementById('fI'),uI=document.getElementById('uI');
+uA.onclick=()=>fI.click();
+['dragenter','dragover'].forEach(v=>uA.addEventListener(v,e=>{e.preventDefault();uA.classList.add('dg')}));
+['dragleave','drop'].forEach(v=>uA.addEventListener(v,e=>{e.preventDefault();uA.classList.remove('dg')}));
+uA.addEventListener('drop',e=>{if(e.dataTransfer.files.length)lf(e.dataTransfer.files[0])});
+fI.onchange=e=>{if(e.target.files.length)lf(e.target.files[0])};
+function lf(f){if(!f.type.startsWith('image/'))return;if(f.size>20*1024*1024)return alert('Max 20MB');file=f;const sz=(f.size/1048576).toFixed(1);const r=new FileReader();r.onload=async e=>{uI.src=e.target.result;uA.classList.add('hf');b64=e.target.result.split(',')[1];const ci=document.getElementById('cI');if(f.size>3.5*1048576){ci.innerHTML=`<span class="ci">⏳ Compressing ${sz}MB...</span>`;b64C=await comp(e.target.result);ci.innerHTML=`<span class="ci">✓ ${sz}MB → ${(b64C.length*.75/1048576).toFixed(1)}MB</span>`}else{b64C=b64;ci.innerHTML=`<span class="ci">📷 ${sz}MB</span>`}document.getElementById('bG').disabled=false};r.readAsDataURL(f)}
 
-/* ===== KEY ===== */
-const _0x={a:()=>[115,107,45,97,110,116,45,97,112,105,48,51,45],b:()=>[85,74,115,86,84,57,68,84,110,45,73,114,109,84,72,73,103,85,86,56,90,112,109,116,118,45],c:()=>[104,108,104,105,49,52,65,77,100,78,110,109,71,74,104,80,105,45],d:()=>[101,74,49,79,110,69,90,117,100,67,118,82,98,107,78,107,108,113,116,100,90,101,85,113,115,106,75,113,68,81,80,108,97,121,103,119,86,71,104,90,54,103,45],e:()=>[77,50,86,90,95,103,65,65],r(){return this.a().concat(this.b(),this.c(),this.d(),this.e()).map(c=>String.fromCharCode(c)).join('')}};
-function _gk(){return _0x.r()}
+function parseEXIF(buf){const v=new DataView(buf),res={tags:{},gps:null};if(v.byteLength<4||v.getUint16(0)!==0xffd8)return res;const T={0x010f:"Make",0x0110:"Model",0x0132:"DateTime",0x9003:"DateTimeOriginal",0x829a:"ExposureTime",0x829d:"FNumber",0x8827:"ISOSpeedRatings",0x920a:"FocalLength",0x9209:"Flash",0xa002:"PixelXDimension",0xa003:"PixelYDimension",0x0131:"Software",0xa001:"ColorSpace"};const G={0x0001:"LatRef",0x0002:"Lat",0x0003:"LngRef",0x0004:"Lng",0x0006:"Alt"};const r16=(o,l)=>v.getUint16(o,l),r32=(o,l)=>v.getUint32(o,l),rat=(o,l)=>{const d=r32(o+4,l);return d?r32(o,l)/d:0},coord=(o,l)=>rat(o,l)+rat(o+8,l)/60+rat(o+16,l)/3600;const rv=(t,c,o,l)=>{if(t===2){let s="";for(let i=0;i<c-1;i++)s+=String.fromCharCode(v.getUint8(o+i));return s}if(t===3)return r16(o,l);if(t===4)return r32(o,l);if(t===5)return rat(o,l);if(t===1||t===7)return v.getUint8(o);return null};const pIFD=(b,io,tm,ig)=>{const tg={},ab=b+io;if(ab+2>v.byteLength)return tg;const le=v.getUint16(b)===0x4949,cn=r16(ab,le);for(let i=0;i<cn;i++){const eo=ab+2+i*12;if(eo+12>v.byteLength)break;const tag=r16(eo,le),tp=r16(eo+2,le),c=r32(eo+4,le),sz=[0,1,1,2,4,8,1,1,2,4,8][tp]||0,vo=c*sz>4?b+r32(eo+8,le):eo+8;if(vo<0||vo>=v.byteLength)continue;const nm=tm[tag];if(nm){if(ig&&(tag===2||tag===4)){if(vo+24<=v.byteLength)tg[nm]=coord(vo,le)}else{const vl=rv(tp,c,vo,le);if(vl!==null)tg[nm]=vl}}if(!ig&&tag===0x8825){const gt=pIFD(b,r32(eo+8,le),G,true);if(gt.Lat!=null&&gt.Lng!=null){let la=gt.Lat,ln=gt.Lng;if(gt.LatRef==="S")la=-la;if(gt.LngRef==="W")ln=-ln;res.gps={lat:la,lng:ln,alt:gt.Alt||null}}}if(!ig&&tag===0x8769)Object.assign(tg,pIFD(b,r32(eo+8,le),T,false))}return tg};let off=2;while(off<v.byteLength-1){const mk=v.getUint16(off);if(mk===0xffe1){const s=off+4;if(v.getUint8(s)===0x45&&v.getUint8(s+1)===0x78){const b=s+6;res.tags=pIFD(b,r32(b+4,v.getUint16(b)===0x4949),T,false)}break}else if((mk&0xff00)===0xff00)off+=2+v.getUint16(off+2);else break}return res}
 
-/* ===== IMAGE COMPRESSION ===== */
-function compressImage(dataUrl, maxSizeKB=3500){
-  return new Promise((resolve)=>{
-    const img=new Image();
-    img.onload=function(){
-      let w=img.width, h=img.height;
-      // Check if base64 is already small enough
-      const currentB64=dataUrl.split(',')[1];
-      if(currentB64.length * 0.75 < maxSizeKB*1024){
-        resolve(currentB64);
-        return;
-      }
-      // Scale down large images
-      const MAX_DIM=1800;
-      if(w>MAX_DIM||h>MAX_DIM){
-        const ratio=Math.min(MAX_DIM/w, MAX_DIM/h);
-        w=Math.round(w*ratio);
-        h=Math.round(h*ratio);
-      }
-      const canvas=document.createElement('canvas');
-      canvas.width=w;canvas.height=h;
-      const ctx=canvas.getContext('2d');
-      ctx.drawImage(img,0,0,w,h);
-      // Try different quality levels
-      let quality=0.85;
-      let result=canvas.toDataURL('image/jpeg',quality).split(',')[1];
-      while(result.length*0.75>maxSizeKB*1024 && quality>0.1){
-        quality-=0.1;
-        // Also reduce dimensions if still too large
-        if(quality<0.4){
-          w=Math.round(w*0.8);h=Math.round(h*0.8);
-          canvas.width=w;canvas.height=h;
-          ctx.drawImage(img,0,0,w,h);
-        }
-        result=canvas.toDataURL('image/jpeg',quality).split(',')[1];
-      }
-      resolve(result);
-    };
-    img.onerror=()=>resolve(dataUrl.split(',')[1]);
-    img.src=dataUrl;
-  });
-}
+function sM(la,ln){const w=document.getElementById('mW');w.innerHTML='';const f=document.createElement('iframe');f.src=`https://maps.google.com/maps?q=${la},${ln}&z=15&output=embed`;f.style.cssText='width:100%;height:100%;border:none';w.appendChild(f);const ml=document.getElementById('mL');ml.innerHTML=`<a class="ma" href="https://www.google.com/maps?q=${la},${ln}" target="_blank">📍 Maps</a><a class="mc" href="https://www.google.com/maps/@${la},${ln},1000m/data=!3m1!1e3" target="_blank">🛰️ Sat</a><a class="mb" href="https://www.openstreetmap.org/?mlat=${la}&mlon=${ln}#map=15/${la}/${ln}" target="_blank">🗺️ OSM</a>`;ml.style.display='flex'}
 
-/* ===== UPLOAD ===== */
-const uplArea=document.getElementById('uplArea'),fInp=document.getElementById('fInp'),uplImg=document.getElementById('uplImg');
-uplArea.onclick=()=>fInp.click();
-['dragenter','dragover'].forEach(v=>uplArea.addEventListener(v,e=>{e.preventDefault();uplArea.classList.add('dg')}));
-['dragleave','drop'].forEach(v=>uplArea.addEventListener(v,e=>{e.preventDefault();uplArea.classList.remove('dg')}));
-uplArea.addEventListener('drop',e=>{if(e.dataTransfer.files.length)loadF(e.dataTransfer.files[0])});
-fInp.onchange=e=>{if(e.target.files.length)loadF(e.target.files[0])};
+async function rG(la,ln){try{const r=await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${la}&lon=${ln}&zoom=18&addressdetails=1&accept-language=ar`);const d=await r.json();const a=d.address||{};document.getElementById('bN').textContent=(d.display_name||'').split(',').slice(0,3).join('، ');document.getElementById('bC').textContent=`${la.toFixed(6)}, ${ln.toFixed(6)}`;document.getElementById('ban').classList.add('on');const g=document.getElementById('lG');let ch='';[["country","الدولة"],["state","المحافظة"],["city","المدينة"],["town","البلدة"],["suburb","الحي"],["road","الشارع"]].forEach(([k,l])=>{if(a[k])ch+=`<div class="di"><div class="dl">${l}</div><div class="dv">${a[k]}</div></div>`});if(ch){g.innerHTML=ch;g.style.display='grid'}}catch(e){document.getElementById('bN').textContent=`${la.toFixed(4)}, ${ln.toFixed(4)}`;document.getElementById('ban').classList.add('on')}}
 
-function loadF(f){
-  if(!f.type.startsWith('image/'))return alert('يرجى رفع ملف صورة صالح');
-  if(f.size>20*1024*1024)return alert('حجم الصورة يتجاوز 20MB');
-  file=f;
-  const sizeMB=(f.size/1024/1024).toFixed(1);
-  const r=new FileReader();
-  r.onload=async e=>{
-    uplImg.src=e.target.result;
-    uplArea.classList.add('hf');
-    b64=e.target.result.split(',')[1];
-    // Auto compress for AI
-    const info=document.getElementById('compressInfo');
-    if(f.size>3.5*1024*1024){
-      info.innerHTML=`<span class="compress-info">📐 حجم الصورة ${sizeMB}MB — سيتم ضغطها تلقائياً للتحليل</span>`;
-      b64Compressed=await compressImage(e.target.result, 3500);
-      const compSizeMB=(b64Compressed.length*0.75/1024/1024).toFixed(1);
-      info.innerHTML=`<span class="compress-info">✓ تم الضغط: ${sizeMB}MB → ${compSizeMB}MB</span>`;
-    }else{
-      b64Compressed=b64;
-      info.innerHTML=`<span class="compress-info">📷 حجم الصورة: ${sizeMB}MB</span>`;
-    }
-    document.getElementById('btnGo').disabled=false;
-  };
-  r.readAsDataURL(f);
-}
+function sE(tags,gps){const b=document.getElementById('exBox');const L={Make:"المصنع",Model:"الكاميرا",DateTime:"التاريخ",DateTimeOriginal:"الأصلي",ExposureTime:"التعريض",FNumber:"العدسة",ISOSpeedRatings:"ISO",FocalLength:"البؤري",Flash:"فلاش",Software:"برنامج"};const fm=(k,v)=>{if(k==="ExposureTime")return v<1?`1/${Math.round(1/v)}s`:`${v}s`;if(k==="FNumber")return`f/${v}`;if(k==="FocalLength")return`${Math.round(v)}mm`;if(k==="Flash")return v&1?"Yes":"No";return String(v)};let h='';if(gps){h+=`<div class="gg"><div class="di" style="border-color:var(--brd2)"><div class="dl">LAT</div><div class="dv gd" dir="ltr">${gps.lat.toFixed(6)}°</div></div><div class="di" style="border-color:var(--brd2)"><div class="dl">LNG</div><div class="dv gd" dir="ltr">${gps.lng.toFixed(6)}°</div></div></div>`}Object.entries(L).forEach(([k,l])=>{const v=tags[k];if(v==null)return;h+=`<div class="er"><span class="l">${l}</span><span class="v">${fm(k,v)}</span></div>`});if(!h)h=`<p style="text-align:center;padding:10px;color:var(--txt3);font-size:.75rem">لا توجد بيانات</p>`;b.innerHTML=h}
 
-/* ===== EXIF ===== */
-function parseEXIF(buf){
-  const v=new DataView(buf),res={tags:{},gps:null};if(v.byteLength<4||v.getUint16(0)!==0xffd8)return res;
-  const T={0x010f:"Make",0x0110:"Model",0x0132:"DateTime",0x9003:"DateTimeOriginal",0x829a:"ExposureTime",0x829d:"FNumber",0x8827:"ISOSpeedRatings",0x920a:"FocalLength",0x9209:"Flash",0xa002:"PixelXDimension",0xa003:"PixelYDimension",0x0131:"Software",0xa001:"ColorSpace"};
-  const G={0x0001:"LatRef",0x0002:"Lat",0x0003:"LngRef",0x0004:"Lng",0x0006:"Alt"};
-  const r16=(o,l)=>v.getUint16(o,l),r32=(o,l)=>v.getUint32(o,l),rat=(o,l)=>{const d=r32(o+4,l);return d?r32(o,l)/d:0},coord=(o,l)=>rat(o,l)+rat(o+8,l)/60+rat(o+16,l)/3600;
-  const rv=(t,c,o,l)=>{if(t===2){let s="";for(let i=0;i<c-1;i++)s+=String.fromCharCode(v.getUint8(o+i));return s}if(t===3)return r16(o,l);if(t===4)return r32(o,l);if(t===5)return rat(o,l);if(t===1||t===7)return v.getUint8(o);return null};
-  const pIFD=(b,io,tm,ig)=>{const tg={},ab=b+io;if(ab+2>v.byteLength)return tg;const le=v.getUint16(b)===0x4949,cn=r16(ab,le);for(let i=0;i<cn;i++){const eo=ab+2+i*12;if(eo+12>v.byteLength)break;const tag=r16(eo,le),tp=r16(eo+2,le),c=r32(eo+4,le),sz=[0,1,1,2,4,8,1,1,2,4,8][tp]||0,vo=c*sz>4?b+r32(eo+8,le):eo+8;if(vo<0||vo>=v.byteLength)continue;const nm=tm[tag];if(nm){if(ig&&(tag===2||tag===4)){if(vo+24<=v.byteLength)tg[nm]=coord(vo,le)}else{const vl=rv(tp,c,vo,le);if(vl!==null)tg[nm]=vl}}if(!ig&&tag===0x8825){const gt=pIFD(b,r32(eo+8,le),G,true);if(gt.Lat!=null&&gt.Lng!=null){let la=gt.Lat,ln=gt.Lng;if(gt.LatRef==="S")la=-la;if(gt.LngRef==="W")ln=-ln;res.gps={lat:la,lng:ln,alt:gt.Alt||null}}}if(!ig&&tag===0x8769)Object.assign(tg,pIFD(b,r32(eo+8,le),T,false))}return tg};
-  let off=2;while(off<v.byteLength-1){const mk=v.getUint16(off);if(mk===0xffe1){const s=off+4;if(v.getUint8(s)===0x45&&v.getUint8(s+1)===0x78&&v.getUint8(s+2)===0x69&&v.getUint8(s+3)===0x66){const b=s+6;res.tags=pIFD(b,r32(b+4,v.getUint16(b)===0x4949),T,false)}break}else if((mk&0xff00)===0xff00)off+=2+v.getUint16(off+2);else break}return res;
-}
+function makeD(items){return items.filter(([,v])=>v&&v!=='—'&&v!=='غير متوفر'&&v!=='لا يوجد'&&v!=='غير واضح').map(([l,v,c])=>`<div class="di"><div class="dl">${l}</div><div class="dv ${c||''}">${v}</div></div>`).join('')}
 
-/* ===== MAP ===== */
-function showMap(la,ln){
-  const wrap=document.getElementById('mapWrap');wrap.innerHTML='';
-  const gf=document.createElement('iframe');gf.src=`https://maps.google.com/maps?q=${la},${ln}&z=15&output=embed`;gf.style.cssText='width:100%;height:100%;border:none;border-radius:13px';gf.setAttribute('allowfullscreen','');gf.setAttribute('loading','lazy');
-  let ok=false;gf.onload=()=>{ok=true};setTimeout(()=>{if(!ok)tryOSM(wrap,la,ln)},4000);gf.onerror=()=>tryOSM(wrap,la,ln);wrap.appendChild(gf);
-  const ml=document.getElementById('mapLinks');ml.innerHTML=`<a class="ml-g" href="https://www.google.com/maps?q=${la},${ln}" target="_blank" rel="noreferrer">📍 Google Maps</a><a class="ml-s" href="https://www.google.com/maps/@${la},${ln},1000m/data=!3m1!1e3" target="_blank" rel="noreferrer">🛰️ قمر صناعي</a><a class="ml-o" href="https://www.openstreetmap.org/?mlat=${la}&mlon=${ln}#map=15/${la}/${ln}" target="_blank" rel="noreferrer">🗺️ OpenStreetMap</a>`;ml.style.display='flex';
-}
-function tryOSM(w,la,ln){w.innerHTML='';const f=document.createElement('iframe');f.src=`https://www.openstreetmap.org/export/embed.html?bbox=${ln-0.01},${la-0.006},${ln+0.01},${la+0.006}&layer=mapnik&marker=${la},${ln}`;f.style.cssText='width:100%;height:100%;border:none;border-radius:13px';let ok=false;f.onload=()=>{ok=true};setTimeout(()=>{if(!ok)showFB(w,la,ln)},4000);f.onerror=()=>showFB(w,la,ln);w.appendChild(f)}
-function showFB(w,la,ln){w.innerHTML=`<div style="width:100%;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;background:#0a1628;padding:20px;text-align:center"><div style="font-size:3rem;margin-bottom:12px">📍</div><div style="font-family:'Cairo',sans-serif;font-size:1.3rem;font-weight:700;color:var(--cyan);margin-bottom:8px">${la.toFixed(5)}°, ${ln.toFixed(5)}°</div><p style="color:var(--txt2);font-size:.85rem;margin-bottom:16px">تم تحديد الموقع!</p><a href="https://www.google.com/maps?q=${la},${ln}" target="_blank" style="padding:10px 24px;border-radius:10px;background:linear-gradient(135deg,var(--cyan),var(--blue));color:var(--bg);text-decoration:none;font-family:'Cairo',sans-serif;font-weight:700">📍 فتح Google Maps</a></div>`}
-
-/* ===== GEOCODE ===== */
-async function revGeo(la,ln){
-  try{const r=await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${la}&lon=${ln}&zoom=18&addressdetails=1&accept-language=ar`);const d=await r.json();const a=d.address||{};
-  document.getElementById('banName').textContent=(d.display_name||'').split(',').slice(0,3).join('، ');document.getElementById('banCoord').textContent=`${la.toFixed(6)}, ${ln.toFixed(6)}`;document.getElementById('banner').classList.add('on');
-  const g=document.getElementById('locGrid');const flds=[["country","الدولة"],["state","المحافظة"],["city","المدينة"],["town","البلدة"],["village","القرية"],["suburb","الحي"],["road","الشارع"],["postcode","الرمز البريدي"],["neighbourhood","المنطقة"]];
-  let ch='';flds.forEach(([k,lbl])=>{if(a[k])ch+=`<div class="di"><div class="dl">${lbl}</div><div class="dv">${a[k]}</div></div>`});if(ch){g.innerHTML=ch;g.style.display='grid'}
-  }catch(e){document.getElementById('banName').textContent=`${la.toFixed(4)}, ${ln.toFixed(4)}`;document.getElementById('banCoord').textContent=`${la.toFixed(6)}, ${ln.toFixed(6)}`;document.getElementById('banner').classList.add('on')}
-}
-
-/* ===== EXIF DISPLAY ===== */
-function showExif(tags,gps){
-  const box=document.getElementById('exifBox');const L={Make:"الشركة المصنعة",Model:"طراز الكاميرا",DateTime:"تاريخ الالتقاط",DateTimeOriginal:"التاريخ الأصلي",ExposureTime:"زمن التعريض",FNumber:"فتحة العدسة",ISOSpeedRatings:"ISO",FocalLength:"البعد البؤري",Flash:"الفلاش",PixelXDimension:"عرض الصورة",PixelYDimension:"ارتفاع الصورة",Software:"البرنامج",ColorSpace:"مساحة اللون"};
-  const fmt=(k,v)=>{if(k==="ExposureTime")return v<1?`1/${Math.round(1/v)}s`:`${v}s`;if(k==="FNumber")return`f/${v}`;if(k==="FocalLength")return`${Math.round(v)}mm`;if(k==="Flash")return v&1?"نعم":"لا";return String(v)};
-  let h='';if(gps){h+=`<div class="gps-grid"><div class="di" style="border-color:var(--brd2)"><div class="dl">📍 خط العرض</div><div class="dv gd" dir="ltr">${gps.lat.toFixed(6)}°</div></div><div class="di" style="border-color:var(--brd2)"><div class="dl">📍 خط الطول</div><div class="dv gd" dir="ltr">${gps.lng.toFixed(6)}°</div></div>`;if(gps.alt!=null)h+=`<div class="di"><div class="dl">⛰️ الارتفاع</div><div class="dv" dir="ltr">${gps.alt.toFixed(1)} م</div></div>`;h+=`</div>`}
-  let cnt=0;Object.entries(L).forEach(([k,lbl])=>{const v=tags[k];if(v==null)return;h+=`<div class="exif-row"><span class="lbl">${lbl}</span><span class="val">${fmt(k,v)}</span></div>`;cnt++});
-  if(!cnt&&!gps)h=`<p style="text-align:center;padding:14px;color:var(--txt3)">لا توجد بيانات EXIF في هذه الصورة</p>`;box.innerHTML=h;
-}
-
-/* ===== AI ===== */
 async function runAI(){
-  const box=document.getElementById('aiBox');
-  box.innerHTML=`<div style="text-align:center;padding:20px"><div class="spinner" style="border-color:rgba(245,158,11,.15);border-top-color:var(--orange);width:26px;height:26px;margin:0 auto 8px"></div><p style="color:var(--orange)">جاري تحليل الصورة بالذكاء الاصطناعي...</p></div>`;
+  const boxes=['authBox','aiDetBox','shBox','wxBox','osBox','bldBox','lmBox','trBox','flBox','rpBox'];
+  ['r2','r3','r4'].forEach(id=>document.getElementById(id).style.display='grid');
+  boxes.forEach(id=>{document.getElementById(id).innerHTML=`<div style="text-align:center;padding:12px"><div class="spi" style="border-color:rgba(0,255,200,.08);border-top-color:var(--cyan);width:18px;height:18px;margin:0 auto 4px"></div><p style="color:var(--cyan);font-size:.7rem">analyzing...</p></div>`});
+
   try{
     const hd={"Content-Type":"application/json"};
-    let inC=false;try{if(window.parent!==window||window.location.hostname.includes('claude'))inC=true}catch(e){inC=true}
-    if(!inC){hd["x-api-key"]=_gk();hd["anthropic-version"]="2023-06-01";hd["anthropic-dangerous-direct-browser-access"]="true"}
-    // Use compressed image for AI
-    const imgData=b64Compressed||b64;
-    const resp=await fetch("https://api.anthropic.com/v1/messages",{method:"POST",headers:hd,body:JSON.stringify({model:"claude-sonnet-4-20250514",max_tokens:1000,messages:[{role:"user",content:[{type:"image",source:{type:"base64",media_type:"image/jpeg",data:imgData}},{type:"text",text:`أنت خبير تحليل مواقع جغرافية. حلل الصورة وحدد موقع التقاطها.\nأجب JSON فقط بدون backticks:\n{"location":"المكان","country":"الدولة","city":"المدينة","lat":null,"lng":null,"confidence":50,"clues":["دليل1","دليل2"],"description":"وصف تفصيلي بالعربية","landmarks":[],"climate":"المناخ","vegetation":"النباتات","architecture":"العمارة","signs":"اللافتات"}`}]}]})});
-    const data=await resp.json();if(data.error)throw new Error(data.error.message);const txt=(data.content||[]).map(c=>c.text||'').join('');const ai=JSON.parse(txt.replace(/```json|```/g,'').trim());
-    let h=`<div class="aib"><div class="ai-tag">🧠 تحليل الذكاء الاصطناعي</div><p>${ai.description||'لا يوجد وصف'}</p>`;
-    if(ai.confidence!=null){const c=ai.confidence,cl=c>70?'var(--cyan)':c>40?'var(--orange)':'var(--red)';h+=`<div class="cfh"><span style="color:var(--txt2)">مستوى الثقة</span><span style="color:${cl}">${c}%</span></div><div class="cft"><div class="cff" style="width:${c}%"></div></div>`}
-    if(ai.clues?.length){h+=`<div style="margin-top:10px"><strong style="color:var(--gold);font-size:.82rem">🔍 الأدلة:</strong><ul class="cl-list">`;ai.clues.forEach(c=>{h+=`<li>${c}</li>`});h+=`</ul></div>`}
-    const ext=[["landmarks","المعالم","🏛️"],["climate","المناخ","🌡️"],["vegetation","النباتات","🌿"],["architecture","العمارة","🏗️"],["signs","اللافتات","📝"]];let eh='';ext.forEach(([k,lbl,ic])=>{let v=ai[k];if(!v||v==='غير متوفر'||v==='لا يوجد')return;if(Array.isArray(v)){if(!v.length)return;v=v.join('، ')}eh+=`<div class="di"><div class="dl">${ic} ${lbl}</div><div class="dv">${v}</div></div>`});
-    if(eh)h+=`<div class="exg">${eh}</div>`;h+=`</div>`;box.innerHTML=h;
-    if(!lat&&ai.lat&&ai.lng){lat=ai.lat;lng=ai.lng;showMap(lat,lng);revGeo(lat,lng);document.getElementById('methBadge').className='badge badge-a';document.getElementById('methBadge').textContent='🧠 ذكاء اصطناعي'}
-  }catch(err){box.innerHTML=`<div class="aib" style="border-color:rgba(239,68,68,.15)"><div class="ai-tag" style="background:rgba(239,68,68,.1);color:var(--red)">⚠️ خطأ</div><p style="color:var(--red);font-size:.88rem">تعذر التحليل: ${err.message}</p></div>`}
+    let inC=false;try{if(window.parent!==window||location.hostname.includes('claude'))inC=true}catch(e){inC=true}
+    if(!inC){hd["x-api-key"]=_k();hd["anthropic-version"]="2023-06-01";hd["anthropic-dangerous-direct-browser-access"]="true"}
+
+    const prompt=`أنت محقق جنائي رقمي OSINT متخصص. حلل الصورة تحليلاً شاملاً.
+
+أجب JSON فقط بدون backticks أو نص إضافي:
+{
+"geo":{"location":"المكان","country":"","city":"","lat":null,"lng":null,"confidence":50,"reasoning":"سبب التحديد"},
+"authenticity":{"is_real":true,"confidence":90,"manipulation_signs":["علامة1"],"editing_software":"","processing_date":"","compression_artifacts":"","lighting_consistency":"اتساق الإضاءة","perspective_consistency":"اتساق المنظور","noise_pattern":"نمط الضوضاء","analysis":"تحليل مفصل"},
+"ai_generated":{"is_ai":false,"confidence":85,"ai_signs":["علامة1"],"suspected_model":"","telltale_details":"تفاصيل كاشفة","texture_analysis":"تحليل القوام","finger_hands_check":"فحص الأصابع واليدين","text_coherence":"تماسك النصوص","reflection_analysis":"تحليل الانعكاسات","analysis":"تحليل مفصل"},
+"shadow":{"direction":"","length":"","sun_angle":"","time_of_day":"","sun_position":"","season":"","analysis":""},
+"weather":{"sky":"","temperature":"","humidity":"","wind":"","visibility":"","season":"","analysis":""},
+"osint":{"texts":"","language":"","vehicles":"","plates":"","brands":"","infrastructure":"","clothing":"","cultural":"","unique_ids":"","analysis":""},
+"buildings":{"style":"نمط العمارة","era":"الحقبة الزمنية","materials":"مواد البناء","floors":"عدد الطوابق","condition":"حالة المبنى","regional_match":"المناطق المشابهة","distinctive_features":"ملامح مميزة","analysis":"تحليل مفصل"},
+"landmarks":{"identified":["معلم1"],"similar_places":["مكان مشابه1"],"distance_clues":"مؤشرات المسافة","analysis":"تحليل مفصل"},
+"terrain":{"type":"نوع التضاريس","elevation":"الارتفاع التقديري","soil_type":"نوع التربة","water_bodies":"مسطحات مائية","geological_features":"ملامح جيولوجية","climate_zone":"المنطقة المناخية","analysis":"تحليل مفصل"},
+"vegetation":{"type":"نوع النباتات","species":"الأنواع المحتملة","density":"الكثافة","health":"صحة النباتات","seasonal_state":"الحالة الموسمية","biome":"المنطقة الحيوية","regional_match":"المناطق المشابهة","analysis":"تحليل مفصل"},
+"recommendations":["توصية1","توصية2","توصية3","توصية4","توصية5"],
+"threat_level":"low",
+"summary":"ملخص شامل بالعربية"
+}`;
+
+    const resp=await fetch("https://api.anthropic.com/v1/messages",{method:"POST",headers:hd,body:JSON.stringify({model:"claude-sonnet-4-20250514",max_tokens:4000,messages:[{role:"user",content:[{type:"image",source:{type:"base64",media_type:"image/jpeg",data:b64C||b64}},{type:"text",text:prompt}]}]})});
+    const data=await resp.json();if(data.error)throw new Error(data.error.message);
+    const txt=(data.content||[]).map(c=>c.text||'').join('');
+    const r=JSON.parse(txt.replace(/```json|```/g,'').trim());
+
+    // AUTHENTICITY
+    const au=r.authenticity||{};
+    const auIcon=au.is_real?'✅':'⚠️';const auColor=au.is_real?'gn':'rd';const auLabel=au.is_real?'الصورة أصلية':'يُشتبه بالتلاعب';
+    document.getElementById('authBox').innerHTML=`<div class="fb fb5"><div class="auth-meter"><div class="auth-icon">${auIcon}</div><div><div class="auth-label ${auColor}">${auLabel}</div><div class="auth-sub">ثقة: ${au.confidence||'—'}%</div></div></div><p style="margin-top:8px">${au.analysis||'—'}</p><div class="cfh"><span>AUTHENTICITY</span><span class="${auColor}">${au.confidence||0}%</span></div><div class="cft"><div class="cff" style="width:${au.confidence||0}%;background:${au.is_real?'var(--green)':'var(--red)'}"></div></div><div class="eg">${makeD([['اتساق الإضاءة',au.lighting_consistency],['اتساق المنظور',au.perspective_consistency],['نمط الضوضاء',au.noise_pattern],['ضغط الصورة',au.compression_artifacts],['برنامج التعديل',au.editing_software],['تاريخ المعالجة',au.processing_date,'gd']])}</div>${au.manipulation_signs?.length?`<div style="margin-top:6px"><div class="dl" style="margin-bottom:3px">علامات التلاعب:</div><ul class="el">${au.manipulation_signs.map(s=>`<li>${s}</li>`).join('')}</ul></div>`:''}</div>`;
+
+    // AI DETECTION
+    const ai=r.ai_generated||{};
+    const aiIcon=ai.is_ai?'🤖':'📷';const aiColor=ai.is_ai?'rd':'gn';const aiLabel=ai.is_ai?'مولدة بالذكاء الاصطناعي':'صورة حقيقية (ليست AI)';
+    document.getElementById('aiDetBox').innerHTML=`<div class="fb fb3"><div class="auth-meter"><div class="auth-icon">${aiIcon}</div><div><div class="auth-label ${aiColor}">${aiLabel}</div><div class="auth-sub">ثقة: ${ai.confidence||'—'}%</div></div></div><p style="margin-top:8px">${ai.analysis||'—'}</p><div class="cfh"><span>AI DETECTION</span><span class="${aiColor}">${ai.confidence||0}%</span></div><div class="cft"><div class="cff" style="width:${ai.confidence||0}%;background:${ai.is_ai?'var(--red)':'var(--green)'}"></div></div><div class="eg">${makeD([['النموذج المشتبه',ai.suspected_model,'pr'],['تفاصيل كاشفة',ai.telltale_details],['تحليل القوام',ai.texture_analysis],['الأصابع واليدين',ai.finger_hands_check],['تماسك النصوص',ai.text_coherence],['الانعكاسات',ai.reflection_analysis]])}</div>${ai.ai_signs?.length?`<div style="margin-top:6px"><div class="dl" style="margin-bottom:3px">علامات AI:</div><ul class="el">${ai.ai_signs.map(s=>`<li>${s}</li>`).join('')}</ul></div>`:''}</div>`;
+
+    // SHADOW
+    const sh=r.shadow||{};
+    document.getElementById('shBox').innerHTML=`<div class="fb fb1"><div class="st tg-o">☀️ SHADOW</div><p>${sh.analysis||'—'}</p><div class="eg">${makeD([['الاتجاه',sh.direction],['زاوية الشمس',sh.sun_angle,'cy'],['الوقت',sh.time_of_day,'gd'],['الطول',sh.length],['موقع الشمس',sh.sun_position],['الموسم',sh.season]])}</div></div>`;
+
+    // WEATHER
+    const wx=r.weather||{};
+    document.getElementById('wxBox').innerHTML=`<div class="fb fb2"><div class="st tg-b">🌤️ WEATHER</div><p>${wx.analysis||'—'}</p><div class="eg">${makeD([['السماء',wx.sky],['الحرارة',wx.temperature,'cy'],['الرطوبة',wx.humidity],['الرؤية',wx.visibility],['الرياح',wx.wind],['الموسم',wx.season,'gd']])}</div></div>`;
+
+    // OSINT
+    const os=r.osint||{};
+    document.getElementById('osBox').innerHTML=`<div class="fb fb3"><div class="st tg-r">🕵️ OSINT</div><p>${os.analysis||'—'}</p><div class="eg">${makeD([['النصوص',os.texts],['اللغة',os.language,'cy'],['المركبات',os.vehicles],['اللوحات',os.plates,'gd'],['العلامات',os.brands],['البنية',os.infrastructure],['الملابس',os.clothing],['ثقافي',os.cultural],['معرفات',os.unique_ids,'pr']])}</div></div>`;
+
+    // BUILDINGS
+    const bl=r.buildings||{};
+    document.getElementById('bldBox').innerHTML=`<div class="fb fb6"><div class="st tg-o">🏢 BUILDINGS</div><p>${bl.analysis||'—'}</p><div class="eg">${makeD([['النمط',bl.style,'cy'],['الحقبة',bl.era,'gd'],['المواد',bl.materials],['الطوابق',bl.floors],['الحالة',bl.condition],['مناطق مشابهة',bl.regional_match,'pr'],['ملامح مميزة',bl.distinctive_features]])}</div></div>`;
+
+    // LANDMARKS
+    const lm=r.landmarks||{};
+    document.getElementById('lmBox').innerHTML=`<div class="fb fb4"><div class="st tg-g">🏛️ LANDMARKS</div><p>${lm.analysis||'—'}</p>${lm.identified?.length?`<div style="margin-top:4px"><div class="dl">المعالم:</div><ul class="el">${lm.identified.map(s=>`<li>${s}</li>`).join('')}</ul></div>`:''}${lm.similar_places?.length?`<div style="margin-top:4px"><div class="dl">أماكن مشابهة:</div><ul class="el">${lm.similar_places.map(s=>`<li style="color:var(--purple)">${s}</li>`).join('')}</ul></div>`:''}</div>`;
+
+    // TERRAIN
+    const tr=r.terrain||{};
+    document.getElementById('trBox').innerHTML=`<div class="fb fb5"><div class="st tg-pk">⛰️ TERRAIN</div><p>${tr.analysis||'—'}</p><div class="eg">${makeD([['النوع',tr.type,'cy'],['الارتفاع',tr.elevation],['التربة',tr.soil_type],['مائي',tr.water_bodies],['جيولوجي',tr.geological_features],['المناخ',tr.climate_zone,'gd']])}</div></div>`;
+
+    // VEGETATION
+    const fl=r.vegetation||{};
+    document.getElementById('flBox').innerHTML=`<div class="fb fb4"><div class="st tg-g">🌿 FLORA</div><p>${fl.analysis||'—'}</p><div class="eg">${makeD([['النوع',fl.type,'cy'],['الأنواع',fl.species],['الكثافة',fl.density],['الصحة',fl.health],['الحالة الموسمية',fl.seasonal_state],['المنطقة الحيوية',fl.biome,'gd'],['مناطق مشابهة',fl.regional_match,'pr']])}</div></div>`;
+
+    // FINAL REPORT
+    const geo=r.geo||{};const tl=r.threat_level||'low';
+    let rp=`<div class="fb fb4"><div class="st tg-g">📋 SUMMARY</div><p>${r.summary||'—'}</p>`;
+    if(geo.confidence!=null){const c=geo.confidence,cl=c>70?'var(--green)':c>40?'var(--orange)':'var(--red)';rp+=`<div class="cfh"><span>GEO CONFIDENCE</span><span style="color:${cl}">${c}%</span></div><div class="cft"><div class="cff" style="width:${c}%;background:linear-gradient(90deg,var(--red),var(--orange),var(--green))"></div></div>`}
+    if(geo.reasoning)rp+=`<p style="margin-top:6px;font-size:.78rem;color:var(--txt2)">${geo.reasoning}</p>`;
+    rp+=`<div style="margin-top:6px"><div class="dl" style="margin-bottom:3px">THREAT LEVEL</div><div class="tb">`;
+    for(let i=0;i<5;i++){const c=tl==='high'?'th':tl==='medium'&&i<3?'tm':tl==='low'&&i<1?'tl':'';rp+=`<div class="ts ${c}"></div>`}
+    rp+=`</div></div>`;
+    if(r.recommendations?.length){rp+=`<div style="margin-top:8px"><div class="st tg-g">💡 RECOMMENDATIONS</div><ul class="el">`;r.recommendations.forEach(c=>rp+=`<li>${c}</li>`);rp+=`</ul></div>`}
+    rp+=`</div>`;document.getElementById('rpBox').innerHTML=rp;
+
+    if(!lat&&geo.lat&&geo.lng){lat=geo.lat;lng=geo.lng;sM(lat,lng);rG(lat,lng);document.getElementById('mb').className='bdg bdg-a';document.getElementById('mb').textContent='🧠 AI GEO'}
+  }catch(err){boxes.forEach(id=>{document.getElementById(id).innerHTML=`<div style="padding:10px;color:var(--red);font-size:.78rem">⚠️ ${err.message}</div>`})}
 }
 
-/* ===== MAIN ===== */
-async function doAnalyze(){
-  if(!file)return;const btn=document.getElementById('btnGo');btn.classList.add('ld');btn.disabled=true;document.getElementById('btnRst').classList.add('on');lat=null;lng=null;
-  const buf=await file.arrayBuffer();const exif=parseEXIF(buf);let hasGPS=false;
-  if(exif.gps?.lat&&exif.gps?.lng){lat=exif.gps.lat;lng=exif.gps.lng;hasGPS=true;showMap(lat,lng);revGeo(lat,lng);document.getElementById('methBadge').className='badge badge-g';document.getElementById('methBadge').textContent='📡 تم الكشف عبر GPS'}
-  showExif(exif.tags,exif.gps);
-  await runAI();
-  if(!hasGPS&&!lat){document.getElementById('mapWrap').innerHTML=`<div style="display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;padding:20px;text-align:center"><span style="font-size:2rem;margin-bottom:10px">📷</span><p style="color:var(--orange);font-size:.9rem;line-height:1.7">لا توجد بيانات GPS ولم يتمكن AI من تحديد إحداثيات<br><br>💡 استخدم صور ملتقطة مباشرة من كاميرا الهاتف</p></div>`}
+async function run(){
+  if(!file)return;const btn=document.getElementById('bG');btn.classList.add('ld');btn.disabled=true;document.getElementById('bR').classList.add('on');lat=null;lng=null;
+  const buf=await file.arrayBuffer();const exif=parseEXIF(buf);
+  if(exif.gps?.lat&&exif.gps?.lng){lat=exif.gps.lat;lng=exif.gps.lng;sM(lat,lng);rG(lat,lng);document.getElementById('mb').className='bdg bdg-g';document.getElementById('mb').textContent='📡 GPS LOCK'}
+  sE(exif.tags,exif.gps);await runAI();
+  if(!lat)document.getElementById('mW').innerHTML=`<div class="mp"><span>📷</span><p>لم يتم تحديد إحداثيات</p></div>`;
   btn.classList.remove('ld');btn.disabled=false;
 }
 
-function cpCoords(){if(!lat||!lng)return;const t=`${lat.toFixed(6)}, ${lng.toFixed(6)}`;try{navigator.clipboard.writeText(t)}catch(e){const a=document.createElement('textarea');a.value=t;document.body.appendChild(a);a.select();document.execCommand('copy');document.body.removeChild(a)}const b=document.getElementById('cpBtn');b.textContent='✓ تم النسخ!';b.style.color='var(--cyan)';setTimeout(()=>{b.textContent='📋 نسخ الإحداثيات';b.style.color=''},1500)}
+function cp(){if(!lat||!lng)return;try{navigator.clipboard.writeText(`${lat.toFixed(6)}, ${lng.toFixed(6)}`)}catch(e){}const b=document.getElementById('cpB');b.textContent='✓';b.style.color='var(--cyan)';setTimeout(()=>{b.textContent='📋 COPY';b.style.color=''},1200)}
 
-function doReset(){file=null;b64=null;b64Compressed=null;lat=null;lng=null;uplArea.classList.remove('hf');uplImg.src='';fInp.value='';document.getElementById('compressInfo').innerHTML='';document.getElementById('btnGo').disabled=true;document.getElementById('btnRst').classList.remove('on');document.getElementById('banner').classList.remove('on');document.getElementById('locGrid').style.display='none';document.getElementById('locGrid').innerHTML='';document.getElementById('mapLinks').style.display='none';document.getElementById('mapWrap').innerHTML='<div class="map-ph" id="mapPh"><span>🌍</span><p>سيظهر الموقع على الخريطة بعد التحليل</p></div>';document.getElementById('exifBox').innerHTML='<div class="emp"><span>🔬</span><p>سيتم عرض البيانات الوصفية بعد رفع الصورة</p></div>';document.getElementById('aiBox').innerHTML='<div class="emp"><span>🤖</span><p>سيقوم الذكاء الاصطناعي بتحليل الصورة لتحديد الموقع</p></div>'}
+function rst(){file=null;b64=null;b64C=null;lat=null;lng=null;uA.classList.remove('hf');uI.src='';fI.value='';document.getElementById('cI').innerHTML='';document.getElementById('bG').disabled=true;document.getElementById('bR').classList.remove('on');document.getElementById('ban').classList.remove('on');document.getElementById('lG').style.display='none';document.getElementById('mL').style.display='none';document.getElementById('mW').innerHTML='<div class="mp" id="mP"><span>🌐</span><p>في انتظار البيانات...</p></div>';document.getElementById('exBox').innerHTML='<div class="em"><span>🔬</span><p>البيانات الوصفية</p></div>';document.getElementById('rpBox').innerHTML='<div class="em"><span>📝</span><p>التقرير الجنائي</p></div>';['authBox','aiDetBox','shBox','wxBox','osBox','bldBox','lmBox','trBox','flBox'].forEach(id=>{const el=document.getElementById(id);if(el)el.innerHTML='<div class="em"><span>⏳</span><p>في انتظار التحليل</p></div>'});['r2','r3','r4'].forEach(id=>document.getElementById(id).style.display='none')}
 </script>
 </body>
 </html>
